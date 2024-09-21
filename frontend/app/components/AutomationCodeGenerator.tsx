@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 export default function AutomationCodeGenerator() {
@@ -9,6 +9,31 @@ export default function AutomationCodeGenerator() {
   const [language, setLanguage] = useState('Python')
   const [generatedCode, setGeneratedCode] = useState('')
   const [loading, setLoading] = useState(false)
+  const [screenshot, setScreenshot] = useState('')
+  const [browserStarted, setBrowserStarted] = useState(false)
+
+  const startBrowser = async () => {
+    setLoading(true)
+    try {
+      await axios.post('http://localhost:5000/api/start-browser')
+      setBrowserStarted(true)
+    } catch (error) {
+      console.error('Error starting browser:', error)
+    }
+    setLoading(false)
+  }
+
+  const stopBrowser = async () => {
+    setLoading(true)
+    try {
+      await axios.post('http://localhost:5000/api/stop-browser')
+      setBrowserStarted(false)
+      setScreenshot('')
+    } catch (error) {
+      console.error('Error stopping browser:', error)
+    }
+    setLoading(false)
+  }
 
   const generateCode = async () => {
     setLoading(true)
@@ -25,10 +50,42 @@ export default function AutomationCodeGenerator() {
     setLoading(false)
   }
 
+  useEffect(() => {
+    let interval: NodeJS.Timeout
+    if (browserStarted) {
+      interval = setInterval(async () => {
+        try {
+          const response = await axios.get('http://localhost:5000/api/get-screenshot')
+          setScreenshot(`data:image/png;base64,${response.data.screenshot}`)
+        } catch (error) {
+          console.error('Error fetching screenshot:', error)
+        }
+      }, 1000)
+    }
+    return () => clearInterval(interval)
+  }, [browserStarted])
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-white mb-8">Generate QA Automation Scripts</h1>
       <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg p-6 shadow-xl">
+        {!browserStarted ? (
+          <button
+            onClick={startBrowser}
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white font-bold py-3 px-6 rounded-md hover:from-green-600 hover:to-blue-700 transition duration-300 mb-4"
+          >
+            Start Browser
+          </button>
+        ) : (
+          <button
+            onClick={stopBrowser}
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-red-500 to-yellow-600 text-white font-bold py-3 px-6 rounded-md hover:from-red-600 hover:to-yellow-700 transition duration-300 mb-4"
+          >
+            Stop Browser
+          </button>
+        )}
         <input
           type="text"
           value={url}
@@ -68,12 +125,20 @@ export default function AutomationCodeGenerator() {
         </div>
         <button
           onClick={generateCode}
-          disabled={loading}
+          disabled={loading || !browserStarted}
           className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold py-3 px-6 rounded-md hover:from-pink-600 hover:to-purple-700 transition duration-300 flex items-center justify-center"
         >
           {loading ? 'Generating Code...' : 'Generate Code'}
         </button>
       </div>
+      
+      {browserStarted && (
+        <div className="mt-8 bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg p-6 shadow-xl">
+          <h2 className="text-2xl font-bold text-white mb-4">Browser View</h2>
+          {screenshot && <img src={screenshot} alt="Browser view" className="w-full rounded-md" />}
+        </div>
+      )}
+      
       {generatedCode && (
         <div className="mt-8 bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg p-6 shadow-xl">
           <h2 className="text-2xl font-bold text-white mb-4">Generated {language} Code</h2>
@@ -81,7 +146,6 @@ export default function AutomationCodeGenerator() {
             {generatedCode}
           </pre>
           <a
-          
             href={`data:text/plain;charset=utf-8,${encodeURIComponent(generatedCode)}`}
             download={`generated_test.${language.toLowerCase() === 'python' ? 'py' : 'java'}`}
             className="mt-4 inline-block bg-gradient-to-r from-green-500 to-blue-600 text-white font-bold py-2 px-4 rounded-md hover:from-green-600 hover:to-blue-700 transition duration-300"
