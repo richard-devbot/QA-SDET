@@ -7,7 +7,7 @@ from llama_index.llms.gemini import Gemini
 llm = Gemini(model_name="models/gemini-1.5-flash-latest", api_key=os.getenv("GOOGLE_API_KEY"))
 mm_llm = GeminiMultiModal(model_name="models/gemini-1.5-flash", api_key=os.getenv("GOOGLE_API_KEY"))
 
-def generate_test_ideas(url, selected_elements, screenshot_base64):
+def generate_test_ideas(url, selected_elements):
     role = "You are a Software Test Consultant with expertise in web application testing"
     prompt = f"""Generate test ideas based on the selected elements of the webpage. 
     Focus on user-oriented tests that cover functionality, usability, and potential edge cases. 
@@ -17,8 +17,6 @@ def generate_test_ideas(url, selected_elements, screenshot_base64):
     
     Selected Elements:
     {selected_elements}
-    
-    Screenshot: {"Available" if screenshot_base64 else "Not available"}
 
     Please provide a mix of positive and negative test scenarios, considering the interactions between the selected elements.
     Format the output as a numbered list of test scenarios.
