@@ -40,6 +40,46 @@ def generate_test_ideas(url, selected_elements):
     response = mm_llm.chat(messages)
     return response.message.content
 
+
+def generate_manual_test_cases(url, selected_elements):
+    role = "You are a Senior QA Engineer specializing in creating detailed manual test cases"
+    prompt = f"""Create detailed manual test cases based on the selected elements of the webpage. 
+    Focus on providing step-by-step instructions that a manual tester would follow to thoroughly test the functionality.
+    Include preconditions, test steps, expected results, and any necessary test data.
+
+    Page URL: {url}
+    
+    Selected Elements:
+    {selected_elements}
+
+    Please provide a set of manual test cases that cover the following aspects:
+    1. Functional testing of each selected element
+    2. Usability testing
+    3. Edge cases and boundary value analysis
+    4. Error handling and validation
+
+    Format each test case as follows:
+    
+    Test Case ID: TC_001
+    Title: [Brief description of the test case]
+    Objective: [What the test case aims to verify]
+    Preconditions: [Any necessary setup or conditions before starting the test]
+    Test Steps:
+    1. [Step 1]
+    2. [Step 2]
+    3. ...
+    Expected Result: [What should happen if the test passes]
+    Test Data: [Any specific data to be used in the test]
+    
+    Please create at least 5 detailed test cases.
+    """
+    
+    messages = [ChatMessage(role="system", content=role),
+                ChatMessage(role="user", content=prompt)]
+    response = mm_llm.chat(messages)
+    return response.message.content
+
+
 def generate_gherkin_feature(user_story, detail_level):
     if detail_level == "Detailed":
         custom_prompt_template = """Create a comprehensive Gherkin feature file based on the provided user story. Follow these instructions to produce a detailed output:
@@ -124,4 +164,66 @@ def generate_gherkin_feature(user_story, detail_level):
     prompt = custom_prompt_template.format(context=user_story)
     messages = [ChatMessage(role="user", content=prompt)]
     response = llm.chat(messages)
+    return response.message.content
+
+def generate_manual_test_cases(user_story):
+    role = "You are a Senior QA Engineer specializing in creating detailed manual test cases"
+    prompt = f"""Create detailed manual test cases based on the given user story. 
+    Focus on providing step-by-step instructions that a manual tester would follow to thoroughly test the functionality.
+    Include preconditions, test steps, expected results, and any necessary test data.
+
+    User Story:
+    {user_story}
+
+    Please provide a set of manual test cases that cover the following aspects:
+    1. Functional testing of the main features described in the user story
+    2. Usability testing
+    3. Edge cases and boundary value analysis
+    4. Error handling and validation
+
+    Format each test case as follows:
+    
+    Test Case ID: TC_001
+    Title: [Brief description of the test case]
+    Objective: [What the test case aims to verify]
+    Preconditions: [Any necessary setup or conditions before starting the test]
+    Test Steps:
+    1. [Step 1]
+    2. [Step 2]
+    3. ...
+    Expected Result: [What should happen if the test passes]
+    Test Data: [Any specific data to be used in the test]
+    
+    Please create at least 5 detailed test cases.
+    """
+    
+    messages = [ChatMessage(role="system", content=role),
+                ChatMessage(role="user", content=prompt)]
+    response = mm_llm.chat(messages)
+    return response.message.content
+
+def convert_manual_to_gherkin(manual_test_cases, detail_level):
+    role = "You are a BDD expert specializing in converting manual test cases to Gherkin scenarios"
+    prompt = f"""Convert the following manual test cases into Gherkin scenarios. 
+    Use the appropriate Gherkin syntax (Feature, Scenario, Given, When, Then, And, But) to create a comprehensive feature file.
+
+    Manual Test Cases:
+    {manual_test_cases}
+
+    Detail Level: {detail_level}
+
+    Please follow these guidelines:
+    1. Create a Feature description based on the overall functionality being tested.
+    2. Convert each test case into one or more scenarios.
+    3. Use Background for common preconditions across scenarios.
+    4. Utilize Scenario Outline for data-driven scenarios if applicable.
+    5. Include appropriate tags for organization and traceability.
+    6. Ensure the Gherkin scenarios capture all the important aspects of the manual test cases.
+
+    Please provide the Gherkin feature file as the output.
+    """
+    
+    messages = [ChatMessage(role="system", content=role),
+                ChatMessage(role="user", content=prompt)]
+    response = mm_llm.chat(messages)
     return response.message.content
