@@ -10,6 +10,9 @@ from lavague.drivers.selenium import SeleniumDriver
 from PIL import Image
 from io import BytesIO
 import base64
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 # Initialize the LLM and other required components
 llm = Gemini(model_name="models/gemini-1.5-flash-latest", api_key=os.getenv("GOOGLE_API_KEY"))
@@ -18,40 +21,73 @@ embedding = GeminiEmbedding(model_name="models/text-embedding-004", api_key=os.g
 
 context = Context(llm=llm, mm_llm=mm_llm, embedding=embedding)
 
-def main(url, feature_content, language):
+import time
+from tenacity import retry, stop_after_attempt, wait_fixed
+
+@retry(stop=stop_after_attempt(5), wait=wait_fixed(2))
+def run_agent(agent, objective):
+    return agent.run(objective)
+
+def main(url, feature_content, language, chrome_driver):
     # Parse feature content
     feature_name = "generated_feature"
     feature_file_name = f"{feature_name}.feature"
     test_case = feature_content
     # Initialize the agent
-    selenium_driver = SeleniumDriver(headless=True)  # Changed to headless for server environment
+    selenium_driver = SeleniumDriver(driver=chrome_driver)
     world_model = WorldModel.from_context(context)
     action_engine = ActionEngine.from_context(context, selenium_driver)
     agent = WebAgent(world_model, action_engine)
     objective = f"Run this test case: \n\n{test_case}"
-    # Run the test case with the agent
+    
     print("--------------------------")
     print(f"Running test case:\n{test_case}")
-    agent.get(url)
-    agent.run(objective)
-    # Perform RAG on final state of HTML page using the action engine
+    
+    # Use WebDriverWait instead of agent.get(url)
+    chrome_driver.get(url)
+    WebDriverWait(chrome_driver, 10).until(
+        EC.presence_of_element_located((By.TAG_NAME, "body"))
+    )
+    
+    try:
+        run_agent(agent, objective)
+    except Exception as e:
+        print(f"Error while running the agent: {str(e)}")
+        # If the agent fails, we'll still try to generate code based on the test case
+    
     print("--------------------------")
     print(f"Processing run...\n{test_case}")
-    nodes = action_engine.navigation_engine.get_nodes(
-        f"We have ran the test case, generate the final assert statement.\n\ntest case:\n{test_case}"
-    )
+    
+    try:
+        nodes = action_engine.navigation_engine.get_nodes(
+            f"We have ran the test case, generate the final assert statement.\n\ntest case:\n{test_case}"
+        )
+    except Exception as e:
+        print(f"Error getting nodes: {str(e)}")
+        nodes = []
+    
     # Parse logs
-    logs = agent.logger.return_pandas()
-    last_screenshot_path = get_latest_screenshot_path(logs.iloc[-1]["screenshots_path"])
-    b64_img = pil_image_to_base64(last_screenshot_path)
-    selenium_code = "\n".join(logs["code"].dropna())
+    try:
+        logs = agent.logger.return_pandas()
+        last_screenshot_path = get_latest_screenshot_path(logs.iloc[-1]["screenshots_path"])
+        b64_img = pil_image_to_base64(last_screenshot_path)
+        selenium_code = "\n".join(logs["code"].dropna())
+    except Exception as e:
+        print(f"Error parsing logs: {str(e)}")
+        b64_img = ""
+        selenium_code = ""
+    
     print("--------------------------")
     print(f"Generating {language} code")
+    
     # Generate test code
     if language.lower() == "python":
         code = generate_pytest_code(url, feature_file_name, test_case, selenium_code, nodes, b64_img)
     else:  # Java
         code = generate_java_code(url, feature_file_name, test_case, selenium_code, nodes, b64_img)
+    
+    if code is None:
+        raise Exception("Failed to generate code after multiple retries")
     
     return code
 
@@ -87,8 +123,18 @@ def generate_pytest_code(url, feature_file_name, test_case, selenium_code, nodes
     {PYTHON_EXAMPLES}
     """
     messages = [ChatMessage(role="user", content=prompt)]
-    response = llm.chat(messages)
-    return response.message.content
+    max_retries = 5
+    delay = 2  # in seconds
+    retry_count = 0
+    while retry_count < max_retries:
+        try:
+            response = llm.chat(messages)
+            return response.message.content
+        except Exception as e:
+            print(f"Error: {e}")
+        time.sleep(delay)
+        retry_count += 1
+    return None
 
 def generate_java_code(url, feature_file_name, test_case, selenium_code, nodes, b64_img):
     prompt = f"""Generate a Java Selenium test script with the following inputs and structure examples to guide you:
@@ -103,8 +149,18 @@ def generate_java_code(url, feature_file_name, test_case, selenium_code, nodes, 
     {JAVA_EXAMPLES}
     """
     messages = [ChatMessage(role="user", content=prompt)]
-    response = llm.chat(messages)
-    return response.message.content
+    max_retries = 3
+    delay = 1  # in seconds
+    retry_count = 0
+    while retry_count < max_retries:
+        try:
+            response = llm.chat(messages)
+            return response.message.content
+        except Exception as e:
+            print(f"Error: {e}")
+        time.sleep(delay)
+        retry_count += 1
+    return None
 
 PYTHON_EXAMPLES = """
 from selenium import webdriver
