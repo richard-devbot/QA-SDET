@@ -22,11 +22,9 @@ context = Context(llm=llm, mm_llm=mm_llm, embedding=embedding)
 
 def setup_interactive_browser(url):
     chrome_options = Options()
-    chrome_options.add_argument("--headless")  # Run in headless mode for server environment
+    chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
-    
-    # Enable performance logging
     chrome_options.set_capability('goog:loggingPrefs', {'performance': 'ALL'})
     
     service = Service(ChromeDriverManager().install())
@@ -34,48 +32,59 @@ def setup_interactive_browser(url):
     driver.get(url)
     return driver
 
-def run_web_agent(objective: str, url: str):
-    driver = setup_interactive_browser(url)
-    selenium_driver = SeleniumDriver(driver=driver)
-    world_model = WorldModel.from_context(context)
-    action_engine = ActionEngine.from_context(context, selenium_driver)
-    agent = WebAgent(world_model, action_engine)
-
+def run_web_agent(objective: str, driver, max_retries=3, retry_delay=5):
     results = []
+    retry_count = 0
 
-    try:
-        agent.get(url)
-        
-        for step in range(agent.n_steps):
-            try:
-                result = agent.run(objective)
-                screenshot = driver.get_screenshot_as_png()
-                screenshot_b64 = base64.b64encode(screenshot).decode('utf-8')
-                
-                step_result = {
-                    "step": step + 1,
-                    "current_url": driver.current_url,
-                    "screenshot": screenshot_b64,
-                    "action_taken": result.instruction,
-                    "output": result.output,
-                    "success": result.success
-                }
-                results.append(step_result)
+    while retry_count < max_retries:
+        try:
+            selenium_driver = SeleniumDriver(driver=driver)
+            world_model = WorldModel.from_context(context)
+            action_engine = ActionEngine.from_context(context, selenium_driver)
+            agent = WebAgent(world_model, action_engine)
 
-                if result.success:
-                    break
-            except Exception as step_error:
-                print(f"Error during step {step + 1}: {str(step_error)}")
-                results.append({
-                    "step": step + 1,
-                    "error": str(step_error)
-                })
-                break
+            for step in range(agent.n_steps):
+                step_retry_count = 0
+                while step_retry_count < max_retries:
+                    try:
+                        result = agent.run(objective)
+                        screenshot = driver.get_screenshot_as_png()
+                        screenshot_b64 = base64.b64encode(screenshot).decode('utf-8')
 
-    except Exception as e:
-        print(f"Error during web agent execution: {str(e)}")
-        results.append({"error": str(e)})
-    finally:
-        driver.quit()
+                        step_result = {
+                            "step": step + 1,
+                            "current_url": driver.current_url,
+                            "screenshot": screenshot_b64,
+                            "action_taken": result.instruction,
+                            "output": result.output,
+                            "success": result.success
+                        }
+                        results.append(step_result)
+
+                        if result.success:
+                            print("2024-09-20 15:29:43,657 - INFO - Objective reached. Stopping...")
+                            return results
+
+                    except Exception as step_error:
+                        print(f"Error during step {step + 1}: {str(step_error)}")
+                        results.append({
+                            "step": step + 1,
+                            "error": str(step_error)
+                        })
+                        step_retry_count += 1
+                        time.sleep(retry_delay)
+                    else:
+                        break
+
+            break
+
+        except Exception as e:
+            print(f"Error during web agent execution: {str(e)}")
+            results.append({"error": str(e)})
+            retry_count += 1
+            time.sleep(retry_delay)
 
     return results
+
+def capture_screenshot(driver):
+    return driver.get_screenshot_as_png()
