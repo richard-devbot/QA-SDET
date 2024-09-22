@@ -13,6 +13,6 @@ def generate_scenarios():
     if mode == 'auto':
         test_scenarios = generate_test_ideas(url, selected_elements)
         return jsonify({"test_scenarios": test_scenarios})
-    else:
-        manual_test_cases = generate_manual_test_cases(url, selected_elements)
+    else:  # manual mode
+        manual_test_cases = generate_manual_test_cases(f"URL: {url}\nSelected Elements: {selected_elements}")
         return jsonify({"manual_test_cases": manual_test_cases})
