@@ -40,20 +40,18 @@ def generate_test_ideas(url, selected_elements):
     response = mm_llm.chat(messages)
     return response.message.content
 
-
-def generate_manual_test_cases(url, selected_elements):
+def generate_manual_test_cases(input_data):
     role = "You are a Senior QA Engineer specializing in creating detailed manual test cases"
-    prompt = f"""Create detailed manual test cases based on the selected elements of the webpage. 
+    prompt = f"""Create detailed manual test cases based on the given input. 
+    This input could be a user story or information about a webpage with selected elements.
     Focus on providing step-by-step instructions that a manual tester would follow to thoroughly test the functionality.
     Include preconditions, test steps, expected results, and any necessary test data.
 
-    Page URL: {url}
-    
-    Selected Elements:
-    {selected_elements}
+    Input:
+    {input_data}
 
     Please provide a set of manual test cases that cover the following aspects:
-    1. Functional testing of each selected element
+    1. Functional testing of the main features described in the input
     2. Usability testing
     3. Edge cases and boundary value analysis
     4. Error handling and validation
@@ -78,7 +76,6 @@ def generate_manual_test_cases(url, selected_elements):
                 ChatMessage(role="user", content=prompt)]
     response = mm_llm.chat(messages)
     return response.message.content
-
 
 def generate_gherkin_feature(user_story, detail_level):
     if detail_level == "Detailed":
@@ -166,42 +163,6 @@ def generate_gherkin_feature(user_story, detail_level):
     response = llm.chat(messages)
     return response.message.content
 
-def generate_manual_test_cases(user_story):
-    role = "You are a Senior QA Engineer specializing in creating detailed manual test cases"
-    prompt = f"""Create detailed manual test cases based on the given user story. 
-    Focus on providing step-by-step instructions that a manual tester would follow to thoroughly test the functionality.
-    Include preconditions, test steps, expected results, and any necessary test data.
-
-    User Story:
-    {user_story}
-
-    Please provide a set of manual test cases that cover the following aspects:
-    1. Functional testing of the main features described in the user story
-    2. Usability testing
-    3. Edge cases and boundary value analysis
-    4. Error handling and validation
-
-    Format each test case as follows:
-    
-    Test Case ID: TC_001
-    Title: [Brief description of the test case]
-    Objective: [What the test case aims to verify]
-    Preconditions: [Any necessary setup or conditions before starting the test]
-    Test Steps:
-    1. [Step 1]
-    2. [Step 2]
-    3. ...
-    Expected Result: [What should happen if the test passes]
-    Test Data: [Any specific data to be used in the test]
-    
-    Please create at least 5 detailed test cases.
-    """
-    
-    messages = [ChatMessage(role="system", content=role),
-                ChatMessage(role="user", content=prompt)]
-    response = mm_llm.chat(messages)
-    return response.message.content
-
 def convert_manual_to_gherkin(manual_test_cases, detail_level):
     role = "You are a BDD expert specializing in converting manual test cases to Gherkin scenarios"
     prompt = f"""Convert the following manual test cases into Gherkin scenarios. 
@@ -227,3 +188,4 @@ def convert_manual_to_gherkin(manual_test_cases, detail_level):
                 ChatMessage(role="user", content=prompt)]
     response = mm_llm.chat(messages)
     return response.message.content
+
