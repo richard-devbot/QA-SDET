@@ -88,10 +88,10 @@ importers:
         version: 3.23.8
     devDependencies:
       '@types/node':
-        specifier: ^20.16.10
+        specifier: ^20
         version: 20.16.10
       '@types/react':
-        specifier: ^18.3.10
+        specifier: ^18
         version: 18.3.10
       '@types/react-dom':
         specifier: ^18
