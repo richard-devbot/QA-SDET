@@ -6,6 +6,8 @@ import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Navbar from "./navbar-page";
+import SessionProvider from "./session-provider";
 
 const phrases = [
   "Test your Web Ideas",
@@ -50,7 +52,7 @@ const titlesAndContext = [
 export default function HomePage() {
   return (
     <>
-      <BackgroundBeamsWithCollision className="min-h-screen relative w-screen">
+      <BackgroundBeamsWithCollision className="min-h-screen relative w-full">
         <div className="min-h-screen flex items-center justify-center dark:text-zinc-100 text-zinc-900">
           <TextAnimation />
           <div className="rounded-full absolute bottom-10 border border-zinc-600 p-2 dark:text-zinc-400 animate-bounce">
