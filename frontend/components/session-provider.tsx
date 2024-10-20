@@ -1,4 +1,3 @@
-"use client";
 import { auth } from "@/auth";
 import Navbar from "@/components/navbar-page";
 import Footer from "./footer-page";

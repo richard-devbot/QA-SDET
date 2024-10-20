@@ -32,10 +32,9 @@ export default function Navbar({
       className={`dark:bg-neutral-950/75 bg-white/75 p-4 fixed w-full z-50 top-0 left-0 ${raleway.className}`}
     >
       <div className="mx-auto flex justify-around items-center dark:text-zinc-100 text-zinc-900 ">
-        <Link href="/" className="flex items-center">
-          <span className="text-2xl font-bold">SDET</span>
-          <Image src="/logo.svg" alt="SDET-Genie Logo" width={40} height={40} />
-          <span className="text-2xl font-bold">Genie</span>
+        <Link href="/" className="flex gap-2 items-center justify-center ">
+          <Image src="/logo.png" alt="Waigenie Logo" width={42} height={42} />
+          <span className="text-2xl mt-2 font-bold">Waigenie</span>
         </Link>
         <div className="hidden md:flex space-x-4">
           <NavLink href="/about">

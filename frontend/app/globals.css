@@ -88,3 +88,11 @@ html.lenis body {
 .lenis.lenis-smooth iframe {
   pointer-events: none;
 }
+
+.not-found-bg {
+  background-color: radial-gradient(
+    circle at 50% 50%,
+    #E3F3F2 0%,
+    #E0DDFF 100%
+  );
+}
