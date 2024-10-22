@@ -60,12 +60,12 @@ export default function HomePage() {
           </div>
         </div>
       </BackgroundBeamsWithCollision>
-      <div className="bg-gradient-to-b from-blue-300 to-zinc-100 dark:bg-gradient-to-b dark:from-blue-900 dark:to-black min-h-screen">
+      <div className="bg-gradient-to-b from-blue-300 to-white dark:bg-gradient-to-b dark:from-blue-900 dark:to-black min-h-screen">
         <FeatureCarousel />
       </div>
-      <div className="bg-gradient-to-b from-zinc-100 to-zinc-300 dark:bg-gradient-to-b dark:from-black dark:to-black">
+      <div className="bg-white dark:bg-gradient-to-b dark:from-black dark:to-black">
         <ListComponent />
-        <div className="px-6 py-2">
+        {/* <div className="px-6 py-2">
           <div className="bg-gradient-to-b from-indigo-400 to-zinc-100 dark:from-blue-400 dark:to-zinc-900 h-[40rem] w-full rounded-xl flex flex-col justify-center items-center gap-20 mb-10 border border-gray-200 dark:border-none">
             <span className="text-white text-5xl font-bold drop-shadow-md">
               Start your journey with SDET Genie today!
@@ -90,7 +90,7 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );
@@ -268,7 +268,7 @@ export function ListComponent() {
 export function ListItem() {
   return (
     <>
-      <div className="w-[400px] h-[300px] bg-white shadow dark:shadow-gray-100 rounded-2xl dark:bg-zinc-200 flex justify-center items-center">
+      <div className="w-[400px] h-[300px] bg-white shadow dark:shadow-gray-100 rounded-2xl dark:bg-zinc-200 flex justify-center items-center border">
         <span className="text-zinc-900">Sample Content here</span>
       </div>
     </>

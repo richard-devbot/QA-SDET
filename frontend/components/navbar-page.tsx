@@ -2,16 +2,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import * as React from "react";
-import { Raleway } from "next/font/google";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { signout } from "@/actions/auth";
 import { useRouter } from "next/navigation";
-
-const raleway = Raleway({
-  weight: "400",
-  subsets: ["latin"],
-});
 
 export default function Navbar({
   isLoggedIn,
@@ -29,7 +23,7 @@ export default function Navbar({
   };
   return (
     <nav
-      className={`dark:bg-neutral-950/75 bg-white/75 p-4 fixed w-full z-50 top-0 left-0 ${raleway.className}`}
+      className={`dark:bg-neutral-950/75 bg-white/75 p-4 fixed w-full z-50 top-0 left-0`}
     >
       <div className="mx-auto flex justify-around items-center dark:text-zinc-100 text-zinc-900 ">
         <Link href="/" className="flex gap-2 items-center justify-center ">
@@ -37,16 +31,9 @@ export default function Navbar({
           <span className="text-2xl mt-2 font-bold">Waigenie</span>
         </Link>
         <div className="hidden md:flex space-x-4">
-          <NavLink href="/about">
-            <span>About</span>
-          </NavLink>
-          <NavLink href="/products">
-            <span>Products</span>
-          </NavLink>
-          <NavLink href="/services">
-            Services
-            {/* <ChevronDown className="size-5 group-hover:rotate-180 transition-all duration-100" /> */}
-          </NavLink>
+          <NavLink href="/about">About</NavLink>
+          <NavLink href="/services">Services</NavLink>
+          <NavLink href="/products">Products</NavLink>
           <NavLink href="/pricing">Pricing</NavLink>
           <NavLink href="/support">Support</NavLink>
         </div>
@@ -92,7 +79,7 @@ function NavLink({
   return (
     <Link
       href={href}
-      className="text-zinc-900 dark:text-white hover:dark:bg-zinc-800 hover:bg-zinc-300 rounded-full px-4 py-2 transition duration-300 flex items-center gap-1 group"
+      className="text-zinc-900 dark:text-white hover:border-b-2 hover:border-blue-400 px-4 py-2 transition duration-300 flex items-center gap-1 group"
     >
       {children}
     </Link>

@@ -2,20 +2,47 @@ import React from "react";
 import Link from "next/link";
 import { DiscordLogoIcon, InstagramLogoIcon } from "@radix-ui/react-icons";
 import { FaFacebook } from "react-icons/fa";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-100 dark:bg-black py-8 sticky top-full">
+    <footer
+      className="dark:bg-black py-8 sticky top-full"
+      style={{
+        background:
+          "linear-gradient(to bottom, #FFFFFF 0%, #C9EFFF 59%, #C9EFFF 100%)",
+      }}
+    >
+      <div className="container mx-auto px-4 h-[500px]">
+        <div className="flex flex-col items-center justify-center h-full w-full gap-5">
+          <span className="text-5xl font-bold">
+            Want to add AI in your automation testing?
+          </span>
+          <div>
+            <Button
+              className="bg-[#ACCEE6] text-black rounded-lg p-2 transition duration-300 shadow-none hover:bg-[#C9EFFF] hover:shadow-lg border-none"
+              variant="outline"
+            >
+              Request a Demo
+            </Button>
+          </div>
+        </div>
+      </div>
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap justify-around w-full">
           <div className="w-full md:w-1/3 mb-6 md:mb-0 flex flex-col">
             <span className="text-lg font-semibold mb-4 text-zinc-900 dark:text-white">
               About Us
             </span>
-            <span className="flex justify-start items-center gap-2 dark:text-zinc-100 text-zinc-900 text-2xl">
-              <span>SDET</span>
-              <img src="/logo.svg" alt="logo" className="size-12" />
-              <span>Genie</span>
+            <span className="flex justify-start items-center gap-2 dark:text-zinc-100 text-zinc-900 text-2xl mb-5">
+              <Image
+                src="/logo.png"
+                alt="Waigenie Logo"
+                width={42}
+                height={42}
+              />
+              <span className="text-2xl mt-2 font-bold">Waigenie</span>
             </span>
             <span className="text-gray-600 dark:text-gray-400">
               We are dedicated to providing high-quality services and products
@@ -125,7 +152,7 @@ const Footer: React.FC = () => {
         </div>
         <div className="border-t border-gray-200 mt-8 pt-8 text-center">
           <span className="text-gray-600 dark:text-gray-100 text-xs">
-            © {new Date().getFullYear()} SDET-Genie. All rights reserved.
+            © {new Date().getFullYear()} WaiGenie. All rights reserved.
           </span>
         </div>
       </div>
