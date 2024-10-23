@@ -1,7 +1,7 @@
-"use client";
 import { auth } from "@/auth";
 import Navbar from "@/components/navbar-page";
-import Footer from "./footer-page";
+import Footer from "@/components/footer-page";
+import { DashboardNavbar } from "@/components/dashboard-navbar";
 
 export default async function SessionProvider({
   children,
@@ -11,13 +11,15 @@ export default async function SessionProvider({
   const session = await auth();
   return (
     <>
-      <Navbar
-        isLoggedIn={!!session}
-        userName={session?.user?.name}
-        userImage={session?.user?.image}
-      />
-      {children}
-      <Footer />
+      {session?.user?.email ? (
+        <DashboardNavbar>{children}</DashboardNavbar>
+      ) : (
+        <>
+          <Navbar/>
+          {children}
+          <Footer />
+        </>
+      )}
     </>
   );
 }

@@ -56,7 +56,7 @@ export function LoginForm() {
     });
   };
   return (
-    <Card className="w-[27rem] shadow-none bg-transparent border-none text-gray-800 h-[calc(100vh-100px)] pt-32">
+    <Card className="w-[27rem] shadow-none bg-transparent border-none text-gray-800 h-[calc(100vh-100px)]">
       <CardHeader>
         <CardTitle className="text-2xl">Login</CardTitle>
         <CardDescription className="text-gray-600">

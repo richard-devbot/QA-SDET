@@ -50,7 +50,7 @@ export default function ResetForm() {
   };
   return (
     <>
-      <Card className="mx-auto max-w-md shadow-none bg-transparent border-none text-gray-800 h-[calc(100vh-100px)] pt-32">
+      <Card className="mx-auto max-w-md shadow-none bg-transparent border-none text-gray-800 h-[calc(100vh-100px)]">
         <CardHeader>
           <CardTitle className="text-2xl">Forgot your Password?</CardTitle>
           <CardDescription className="text-gray-600">

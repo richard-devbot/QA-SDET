@@ -51,7 +51,7 @@ export default function SignupForm() {
     });
   };
   return (
-    <Card className="mx-auto max-w-md shadow-none border-none bg-transparent text-gray-800 h-[calc(100vh-100px)] pt-32">
+    <Card className="mx-auto max-w-md shadow-none border-none bg-transparent text-gray-800 h-[calc(100vh-100px)]">
       <CardHeader>
         <CardTitle className="text-2xl">Sign Up</CardTitle>
         <CardDescription className="text-gray-600">
