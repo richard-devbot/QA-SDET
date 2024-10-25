@@ -45,7 +45,7 @@ export default function AboutPage() {
   return (
     <>
       <div className="bg-gradient-to-b from-white via-blue-200/50 to-white">
-        <div className="flex flex-col items-center justify-start mt-32 max-w-7xl mx-auto gap-32">
+        <div className="flex flex-col items-center justify-start mt-32 max-w-7xl mx-auto gap-10">
           <div className="flex flex-col items-center justify-center gap-5 py-5">
             <span className="text-[4rem]">
               About{" "}
@@ -57,17 +57,17 @@ export default function AboutPage() {
               Revolutionizing Quality Assurance with AI-powered solutions
             </span>
           </div>
-          <div className="flex justify-center items-center gap-20">
+          <div className="flex justify-center items-center gap-44">
             <div className="flex flex-col items-start justify-start w-[450px] gap-10">
-              <span className="text-2xl text-[#0717A1]">Our Vision</span>
+              <span className="text-3xl text-[#0717A1]">Our Vision</span>
               <div className="flex flex-col gap-5">
-                <p className="text-justify">
+                <p className="text-justify text-lg">
                   At Waigenie, we envision a future where QA processes are
                   seamlessly integrated with cutting-edge AI technology,
                   empowering teams to deliver flawless software at unprecedented
                   speeds.
                 </p>
-                <p className="text-justify">
+                <p className="text-justify text-lg">
                   We're building a platform that will revolutionize how
                   enterprises approach quality assurance, making it more
                   efficient, accurate, and adaptable to the ever-changing
@@ -94,7 +94,7 @@ export default function AboutPage() {
               </p>
             </div>
           </div>
-          <div className="max-w-4xl my-10">
+          <div className="max-w-6xl my-10">
             <div className="mx-auto flex flex-col items-center justify-center gap-10">
               <span className="text-4xl text-center text-zinc-900 mb-12">
                 What{" "}

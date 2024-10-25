@@ -4,11 +4,6 @@ import React from "react";
 import { Inria_Serif } from "next/font/google";
 import { ArrowBigRightDash, ArrowRight } from "lucide-react";
 
-const Inria = Inria_Serif({
-  weight: ["300", "400", "700"],
-  subsets: ["latin"],
-});
-
 interface SideTextProps {
   title: string;
   description: string;
@@ -110,7 +105,7 @@ export default function ServicesPage() {
         <ListComp />
         <div className="flex justify-around items-center mx-14 h-[700px] bg-[#C9EFFF]/50 rounded-lg">
           <div
-            className={`text-[6rem] flex flex-col justify-center items-start ${Inria.className}`}
+            className={`text-[6rem] flex flex-col justify-center items-start font-normal`}
           >
             <span>Why</span>
             <span className="text-[#432F91]">WaiGenie?</span>

@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
       }}
     >
       <div className="container mx-auto px-4 h-[500px]">
-        <div className="flex flex-col items-center justify-center h-full w-full gap-5">
+        <div className="flex flex-col items-center justify-center h-full w-full gap-14">
           <span className="text-5xl font-bold">
             Want to add AI in your automation testing?
           </span>

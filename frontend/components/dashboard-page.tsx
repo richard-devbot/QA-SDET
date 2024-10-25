@@ -1,25 +1,5 @@
-"use client";
+// components/dashboard-page.tsx
 import React from "react";
-import { User } from "@prisma/client";
-import { incrementCredits, decrementCredits } from "@/actions/credits";
-
-export default function DashboardPage({ user }: { user: User }) {
-  const handleIncrement = () => {
-    incrementCredits(user);
-  };
-  const handleDecrement = () => {
-    decrementCredits(user);
-  };
-  return (
-    <>
-      <div className="w-full h-screen flex items-center justify-center gap-5">
-        <div className="bg-black h-[calc(100dvh-100px)] w-[calc(50vw-10rem)] rounded-lg text-white">
-          this is configuration
-        </div>
-        <div className="bg-[#252525] h-[calc(100dvh-100px)] w-[calc(50vw-10rem)] rounded-lg text-white">
-          <div>web pages</div>
-        </div>
-      </div>
-    </>
-  );
+export default function DashboardPage() {
+  return <div>{/* The Navbar will control what appears here */}</div>;
 }
