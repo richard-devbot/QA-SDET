@@ -30,6 +30,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { signOut } from "@/auth";
+import { signout } from "@/actions/auth";
 
 interface DashboardNavbarProps {
   user: User;
@@ -63,13 +64,9 @@ export function DashboardNavbar({ user, children }: DashboardNavbarProps) {
   const router = useRouter();
   const [activeItem, setActiveItem] = useState(menuItems[0].label);
 
-  const handleSignout = async () => {
-    try {
-      await signOut();
-      router.push("/");
-    } catch (error) {
-      console.error("Signout failed:", error);
-    }
+  const handleSignout = () => {
+    signout();
+    router.push("/");
   };
 
   return (
