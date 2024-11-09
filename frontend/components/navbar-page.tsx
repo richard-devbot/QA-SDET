@@ -19,7 +19,7 @@ export default function Navbar() {
           <NavLink href="/services">Services</NavLink>
           <NavLink href="/products">Products</NavLink>
           <NavLink href="/pricing">Pricing</NavLink>
-          <NavLink href="/support">Support</NavLink>
+          <NavLink href="/contact">Contact</NavLink>
         </div>
         <div className="flex items-center justify-center gap-2">
           <Link
