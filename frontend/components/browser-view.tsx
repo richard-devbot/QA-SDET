@@ -28,10 +28,15 @@ const BrowserView: React.FC<BrowserViewProps> = ({
   }, [onElementsSelected]);
 
   return (
-    <div className="browser-view">
+    <div className="browser-view rounded-md">
       <iframe
         src={proxyUrl}
-        style={{ width: "100%", height: "600px", border: "none" }}
+        style={{
+          width: "100%",
+          // height: "100%",
+          border: "none",
+        }}
+        className="rounded-md h-[calc(100vh-100px)]"
         sandbox="allow-scripts allow-same-origin"
       />
     </div>

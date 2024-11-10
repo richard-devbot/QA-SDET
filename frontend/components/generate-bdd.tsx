@@ -33,27 +33,27 @@ export default function GenerateBDD() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold text-white mb-8">
-        Generate BDD Gherkin Feature Steps
-      </h1>
-      <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg p-6 shadow-xl">
+    <div className="max-w-8xl mx-auto px-4 py-8 flex justify-center items-center gap-8">
+      <div className="w-1/3 bg-gray-300 p-8 rounded-md h-[calc(100vh-100px)]">
+        <h1 className="text-4xl font-bold text-black mb-8">
+          Generate BDD Gherkin Feature Steps
+        </h1>
         <textarea
           value={userStory}
           onChange={(e) => setUserStory(e.target.value)}
           placeholder="Enter user story"
-          className="w-full p-3 mb-4 bg-transparent border border-pink-300 rounded-md text-white placeholder-pink-200 focus:outline-none focus:border-pink-500"
+          className="w-full p-3 mb-4 bg-white border border-gray-300 rounded-md text-black placeholder-gray-400 focus:outline-none focus:border-gray-500"
           rows={5}
         />
         <div className="mb-6">
-          <h3 className="text-white text-lg mb-2">Generation Method:</h3>
-          <div className="flex space-x-4">
+          <h3 className="text-black text-lg mb-2">Generation Method:</h3>
+          <div className="flex justify-center space-x-4 mb-4">
             <button
               onClick={() => setGenerationMethod("direct")}
               className={`px-4 py-2 rounded-md ${
                 generationMethod === "direct"
-                  ? "bg-pink-500 text-white"
-                  : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                  ? "bg-black text-white"
+                  : "bg-gray-200 text-black"
               }`}
             >
               Direct Gherkin
@@ -62,25 +62,25 @@ export default function GenerateBDD() {
               onClick={() => setGenerationMethod("manual-first")}
               className={`px-4 py-2 rounded-md ${
                 generationMethod === "manual-first"
-                  ? "bg-pink-500 text-white"
-                  : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                  ? "bg-black text-white"
+                  : "bg-gray-200 text-black"
               }`}
             >
-              Manual Test Cases + BBD Gherkin Steps
+              Manual Test Cases + BDD Gherkin Steps
             </button>
           </div>
         </div>
 
         {generationMethod === "direct" && (
           <div className="mb-6">
-            <h3 className="text-white text-lg mb-2">Detail Level:</h3>
-            <div className="flex space-x-4">
+            <h3 className="text-black text-lg mb-2">Detail Level:</h3>
+            <div className="flex justify-center space-x-4">
               <button
                 onClick={() => setDetailLevel("Simple")}
                 className={`px-4 py-2 rounded-md ${
                   detailLevel === "Simple"
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                    ? "bg-black text-white"
+                    : "bg-gray-200 text-black"
                 }`}
               >
                 Simple
@@ -89,8 +89,8 @@ export default function GenerateBDD() {
                 onClick={() => setDetailLevel("Detailed")}
                 className={`px-4 py-2 rounded-md ${
                   detailLevel === "Detailed"
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                    ? "bg-black text-white"
+                    : "bg-gray-200 text-black"
                 }`}
               >
                 Detailed
@@ -102,31 +102,37 @@ export default function GenerateBDD() {
         <button
           onClick={generateGherkinFeature}
           disabled={loading}
-          className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold py-3 px-6 rounded-md hover:from-pink-600 hover:to-purple-700 transition duration-300 flex items-center justify-center"
+          className="w-full bg-black text-white font-bold py-3 px-6 rounded-md hover:bg-gray-800 transition duration-300"
         >
           {loading ? "Generating..." : "Generate Gherkin Feature"}
         </button>
+        {manualTestCases && (
+          <>
+            <div className="p-4">
+              <h2 className="text-2xl font-bold text-black mb-4">
+                Generated Manual Test Cases
+              </h2>
+            </div>
+            <pre className="bg-white p-4 rounded-md overflow-x-auto text-black border border-gray-300 whitespace-pre-wrap">
+              {manualTestCases}
+            </pre>
+          </>
+        )}
+        {gherkinFeature && (
+          <div className="p-4">
+            <h2 className="text-2xl font-bold text-black mb-4">
+              Generated Gherkin Feature
+            </h2>
+          </div>
+        )}
       </div>
-      {manualTestCases && (
-        <div className="mt-8 bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg p-6 shadow-xl">
-          <h2 className="text-2xl font-bold text-white mb-4">
-            Generated Manual Test Cases
-          </h2>
-          <pre className="bg-gray-800 p-4 rounded-md overflow-x-auto text-pink-200 whitespace-pre-wrap">
-            {manualTestCases}
-          </pre>
-        </div>
-      )}
-      {gherkinFeature && (
-        <div className="mt-8 bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg p-6 shadow-xl">
-          <h2 className="text-2xl font-bold text-white mb-4">
-            Generated Gherkin Feature
-          </h2>
-          <pre className="bg-gray-800 p-4 rounded-md overflow-x-auto text-pink-200 whitespace-pre-wrap">
+      <div className="w-2/3 bg-gray-300 rounded-md h-[calc(100vh-100px)]">
+        {gherkinFeature && (
+          <pre className="bg-white p-4 rounded-md overflow-x-auto text-black border border-gray-300 whitespace-pre-wrap">
             {gherkinFeature}
           </pre>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

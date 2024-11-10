@@ -1,24 +1,18 @@
+// components/dashboard-navbar.tsx
 "use client";
-
 import React, { useState } from "react";
+import { Sidebar, SidebarBody, SidebarLink } from "./ui/sidebar"; // Assuming SidebarLink is imported here
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarProvider,
-  SidebarTrigger,
-  SidebarFooter,
-} from "./ui/sidebar";
-import {
+  IconArrowLeft,
+  IconBrandTabler,
+  IconSettings,
+  IconUserBolt,
   IconListCheck,
   IconCode,
   IconSearch,
-  IconSettings,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { User } from "@prisma/client";
 import TestIdea from "./test-idea";
@@ -26,114 +20,167 @@ import GenerateBDD from "./generate-bdd";
 import IdentifyEl from "./identify-el";
 import AutomateCode from "./automate-code";
 import Image from "next/image";
-import Link from "next/link";
+import Link, { LinkProps } from "next/link";
 import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "framer-motion";
-import { signOut } from "@/auth";
+import { motion } from "framer-motion";
 import { signout } from "@/actions/auth";
 
-interface DashboardNavbarProps {
+export function DashboardNavbar({
+  user,
+  children,
+}: {
   user: User;
   children: React.ReactNode;
-}
-
-const menuItems = [
-  {
-    label: "Test Idea",
-    icon: <IconListCheck className="h-4 w-4" />,
-    component: <TestIdea />,
-  },
-  {
-    label: "Generate BDD",
-    icon: <IconCode className="h-4 w-4" />,
-    component: <GenerateBDD />,
-  },
-  {
-    label: "Identify Elements",
-    icon: <IconSearch className="h-4 w-4" />,
-    component: <IdentifyEl />,
-  },
-  {
-    label: "Automate Code",
-    icon: <IconSettings className="h-4 w-4" />,
-    component: <AutomateCode />,
-  },
-];
-
-export function DashboardNavbar({ user, children }: DashboardNavbarProps) {
+}) {
   const router = useRouter();
-  const [activeItem, setActiveItem] = useState(menuItems[0].label);
-
   const handleSignout = () => {
     signout();
     router.push("/");
   };
 
+  const [activeLink, setActiveLink] = useState("TestIdea");
+
+  const links = [
+    {
+      label: "TestIdea",
+      href: "#",
+      icon: (
+        <>
+          <IconListCheck className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        </>
+      ),
+    },
+    {
+      label: "GenerateBDD",
+      href: "#",
+      icon: (
+        <>
+          <IconCode className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        </>
+      ),
+    },
+    {
+      label: "IdentifyEl",
+      href: "#",
+      icon: (
+        <>
+          <IconSearch className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        </>
+      ),
+    },
+    {
+      label: "AutomateCode",
+      href: "#",
+      icon: (
+        <>
+          <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        </>
+      ),
+    },
+  ];
+
+  const linkComponents = [
+    {
+      label: "TestIdea",
+      component: <TestIdea />,
+    },
+    {
+      label: "GenerateBDD",
+      component: <GenerateBDD />,
+    },
+    {
+      label: "IdentifyEl",
+      component: <IdentifyEl />,
+    },
+    {
+      label: "AutomateCode",
+      component: <AutomateCode />,
+    },
+  ];
+
+  const handleLinkClick = (link: string) => {
+    setActiveLink(link);
+  };
+  const [open, setOpen] = useState(false);
+
   return (
-    <SidebarProvider defaultOpen>
-      <div className="flex min-h-screen">
-        <Sidebar>
-          <SidebarHeader className="border-b border-border px-2">
-            <div className="flex h-16 items-center gap-2">
-              <SidebarTrigger />
-              <Image
-                src="/logo.png"
-                width={24}
-                height={24}
-                alt="WaiGenie Logo"
-                priority
-                className="h-6 w-6"
-              />
-              <span className="font-semibold">WaiGenie</span>
-            </div>
-          </SidebarHeader>
-
-          <SidebarContent>
-            <SidebarMenu>
-              {menuItems.map((item) => (
-                <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton
-                    isActive={activeItem === item.label}
-                    onClick={() => setActiveItem(item.label)}
-                    tooltip={item.label}
-                  >
-                    {item.icon}
-                    <span>{item.label}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+    <div
+      className={cn(
+        "rounded-md flex flex-col md:flex-row bg-gray-200 dark:bg-neutral-800 w-full flex-1 mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden",
+        "h-screen" // for your use case, use h-screen instead of h-[60vh]
+      )}
+    >
+      <Sidebar open={open} setOpen={setOpen}>
+        <SidebarBody className="justify-between gap-10">
+          <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+            {open ? <Logo /> : <LogoIcon />}
+            <div className="mt-8 flex flex-col gap-2 justify-start items-start">
+              {links.map((link, idx) => (
+                <Button
+                  key={idx}
+                  onClick={() => handleLinkClick(link.label)}
+                  className="bg-transparent shadow-none border-none flex-shrink-0 p-0"
+                  variant="outline"
+                >
+                  <SidebarLink link={link} />
+                </Button>
               ))}
-            </SidebarMenu>
-          </SidebarContent>
-
-          <SidebarFooter className="border-t border-border p-2">
-            <SidebarMenuButton
+            </div>
+          </div>
+          <div>
+            <Button
+              className="bg-transparent shadow-none border-none flex-shrink-0 p-0"
               onClick={handleSignout}
-              className="w-full justify-start"
+              variant="outline"
             >
-              <Avatar className="h-5 w-5">
-                <AvatarImage src={user.image ?? ""} />
-                <AvatarFallback>{user.name?.[0] ?? "U"}</AvatarFallback>
-              </Avatar>
-              <span>Sign out</span>
-            </SidebarMenuButton>
-          </SidebarFooter>
-        </Sidebar>
-
-        <main className="flex-1 overflow-auto bg-background p-6">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeItem}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
-              className="h-full"
-            >
-              {menuItems.find((item) => item.label === activeItem)?.component}
-            </motion.div>
-          </AnimatePresence>
-        </main>
+              <SidebarLink
+                link={{
+                  label: "Signout",
+                  href: "#",
+                  icon: (
+                    <Avatar className="size-6">
+                      <AvatarImage src={user.image ?? ""} className="" />
+                      <AvatarFallback>{user.name ?? "US"}</AvatarFallback>
+                    </Avatar>
+                  ),
+                }}
+              />
+            </Button>
+          </div>
+        </SidebarBody>
+      </Sidebar>
+      <div className="flex-1">
+        {linkComponents.find((link) => link.label === activeLink)?.component}
       </div>
-    </SidebarProvider>
+    </div>
   );
 }
+
+export const Logo = () => {
+  return (
+    <Link
+      href="#"
+      className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20 min-h-10 w-full justify-start"
+    >
+      <Image src="/logo.png" width={24} height={24} alt="" />
+      <motion.span
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="font-medium text-black dark:text-white whitespace-pre text-[16px] pt-2"
+      >
+        WaiGenie
+      </motion.span>
+    </Link>
+  );
+};
+export const LogoIcon = () => {
+  return (
+    <Link
+      href="#"
+      className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20 min-h-10"
+    >
+      {/* <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" /> */}
+      <Image src="/logo.png" alt="" width={24} height={24} />
+    </Link>
+  );
+};
