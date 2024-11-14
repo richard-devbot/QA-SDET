@@ -1,8 +1,11 @@
 "use client";
 import Image from "next/image";
-import React from "react";
+import React, { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Inria_Serif } from "next/font/google";
-import { ArrowBigRightDash, ArrowRight } from "lucide-react";
+import { ArrowBigRightDash, ArrowRight, ChevronRight, Cpu } from "lucide-react";
 
 interface SideTextProps {
   title: string;
@@ -80,13 +83,38 @@ const arr = [
 ];
 
 export default function ServicesPage() {
+  const titleRef = useRef(null);
+  const heroRef = useRef(null);
+  const listRef = useRef(null);
+  const agentRef = useRef(null);
+  const whyRef = useRef(null);
+
+  const isTitleInView = useInView(titleRef, { once: true });
+  const isHeroInView = useInView(heroRef, { once: true });
+  const isListInView = useInView(listRef, { once: true });
+  const isAgentInView = useInView(agentRef, { once: true });
+  const isWhyInView = useInView(whyRef, { once: true });
+
   return (
     <>
-      <main className="mt-32">
-        <div className="flex flex-col justify-center items-center">
+      <main className="min-h-screen bg-gradient-to-br from-white-50 via-blue-50 to-white-50 overflow-hidden mt-32">
+        <motion.div
+          ref={titleRef}
+          initial={{ opacity: 0, y: 20 }}
+          animate={isTitleInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col justify-center items-center"
+        >
           <span className="text-5xl font-bold pt-10">OUR SERVICES</span>
-        </div>
-        <div className="flex w-full justify-center items-center gap-36 min-h-[40rem]">
+        </motion.div>
+
+        <motion.div
+          ref={heroRef}
+          initial={{ opacity: 0, y: -50 }}
+          animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="flex w-full justify-center items-center gap-36 min-h-[50rem]"
+        >
           <div className="w-[500px] h-[500px] bg-[radial-gradient(50%_50%_at_50%_50%,_var(--tw-gradient-stops))] from-blue-500/40 to-blue-100/0.1 flex justify-center items-center backdrop-blur-md gap-20">
             <div className="w-[500px] text-center text-3xl text-black p-10 rounded-lg bg-transparent">
               Empower your QA team with cutting-edge AI solutions tailored for
@@ -95,22 +123,122 @@ export default function ServicesPage() {
           </div>
           <div>
             <Image
-              src="/about_graphic.png"
-              alt="about_graphic"
+              src="/About_Graphic.png"
+              alt="About_Graphic"
               width={500}
               height={500}
             />
           </div>
-        </div>
-        <ListComp />
-        <div className="flex justify-around items-center mx-14 h-[700px] bg-[#C9EFFF]/50 rounded-lg">
+        </motion.div>
+
+        <motion.div
+          ref={listRef}
+          initial={{ opacity: 0, y: 50 }}
+          animate={isListInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1 }}
+        >
+          <ListComp />
+        </motion.div>
+
+        {/* AI Agent Section */}
+        <motion.section
+          ref={agentRef}
+          initial={{ opacity: 0, y: 50 }}
+          animate={isAgentInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="mb-16"
+        >
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white rounded-2xl shadow-xl p-8 md:p-12">
+            <div className="flex flex-col md:flex-row items-center">
+              <div className="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+                <h2 className="text-3xl font-bold mb-4 text-gray-900">
+                  Meet Our AI Agent
+                </h2>
+                <p className="text-xl text-gray-600 mb-6">
+                  Experience the future of QA testing with our advanced AI
+                  agent, designed to revolutionize your testing process.
+                </p>
+                <Tabs defaultValue="features" className="w-full">
+                  <TabsList>
+                    <TabsTrigger value="features">Features</TabsTrigger>
+                    <TabsTrigger value="benefits">Benefits</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="features">
+                    <ul className="space-y-2">
+                      <li className="flex items-center">
+                        <ChevronRight className="w-5 h-5 text-indigo-500 mr-2" />
+                        <span>Autonomous test scenario generation</span>
+                      </li>
+                      <li className="flex items-center">
+                        <ChevronRight className="w-5 h-5 text-indigo-500 mr-2" />
+                        <span>Intelligent bug detection and reporting</span>
+                      </li>
+                      <li className="flex items-center">
+                        <ChevronRight className="w-5 h-5 text-indigo-500 mr-2" />
+                        <span>Adaptive learning from test results</span>
+                      </li>
+                    </ul>
+                  </TabsContent>
+                  <TabsContent value="benefits">
+                    <ul className="space-y-2">
+                      <li className="flex items-center">
+                        <ChevronRight className="w-5 h-5 text-indigo-500 mr-2" />
+                        <span>Reduce manual testing time by up to 70%</span>
+                      </li>
+                      <li className="flex items-center">
+                        <ChevronRight className="w-5 h-5 text-indigo-500 mr-2" />
+                        <span>Improve test coverage and accuracy</span>
+                      </li>
+                      <li className="flex items-center">
+                        <ChevronRight className="w-5 h-5 text-indigo-500 mr-2" />
+                        <span>Accelerate software delivery pipeline</span>
+                      </li>
+                    </ul>
+                  </TabsContent>
+                </Tabs>
+                <Button className="mt-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white">
+                  Try AI Agent Demo
+                </Button>
+              </div>
+              <div className="md:w-1/2">
+                <div className="relative">
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.05, 1],
+                      rotate: [0, 5, -5, 0],
+                    }}
+                    transition={{
+                      duration: 10,
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                    }}
+                    className="w-64 h-64 mx-auto bg-indigo-100 rounded-full flex items-center justify-center"
+                  >
+                    <Cpu className="w-32 h-32 text-indigo-600" />
+                  </motion.div>
+                  <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                    <motion.div className="w-80 h-80 bg-purple-200 rounded-full opacity-50 filter blur-xl" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.div
+          ref={whyRef}
+          initial={{ opacity: 0, y: 50 }}
+          animate={isWhyInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex justify-around items-center h-[700px] bg-[#C9EFFF]/50 rounded-2xl shadow-xl"
+        >
           <div
-            className={`text-[6rem] flex flex-col justify-center items-start font-normal`}
+            className={`text-[5rem] flex flex-col justify-center items-start font-normal`}
           >
             <span>Why</span>
             <span className="text-[#432F91]">WaiGenie?</span>
           </div>
-          <div className="w-[600px] flex flex-wrap">
+          <div className="w-[500px] flex flex-wrap">
             <div className="flex flex-col justify-center items-start gap-10">
               {sideTextArr.map((item, index) => (
                 <SideText
@@ -121,7 +249,7 @@ export default function ServicesPage() {
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
       </main>
     </>
   );
@@ -130,12 +258,12 @@ export default function ServicesPage() {
 function SideText({ title, description }: SideTextProps) {
   return (
     <>
-      <div className="flex justify-center items-center gap-5">
-        <div className="p-4 bg-[#7A71E2] rounded-full">
+      <div className="flex justify-center items-center gap-8">
+        <div className="p-2 bg-[#7A71E2] rounded-full">
           <ArrowRight className="size-6 text-white" />
         </div>
         <span className="flex flex-col gap-2">
-          <span className="text-2xl font-bold">{title}</span>
+          <span className="text-xl font-bold">{title}</span>
           <span className="text-sm">{description}</span>
         </span>
       </div>

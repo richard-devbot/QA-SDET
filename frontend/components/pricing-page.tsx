@@ -1,7 +1,18 @@
+"use client";
 import { Check, X } from "lucide-react";
 import Link from "next/link";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 export default function PricingPage() {
+  const titleRef = useRef(null);
+  const plansRef = useRef(null);
+  const customRef = useRef(null);
+
+  const isTitleInView = useInView(titleRef, { once: true });
+  const isPlansInView = useInView(plansRef, { once: true });
+  const isCustomInView = useInView(customRef, { once: true });
+
   const plans = [
     {
       name: "Starter",
@@ -48,9 +59,15 @@ export default function PricingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 py-32 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-b from-white via-blue-200/50 to-white py-32 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto min-h-screen mt-20">
+        <motion.div
+          ref={titleRef}
+          initial={{ opacity: 0, y: 20 }}
+          animate={isTitleInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col items-center justify-center"
+        >
           <span className="text-4xl font-extrabold text-gray-900">
             Choose the Right Plan for You
           </span>
@@ -58,12 +75,21 @@ export default function PricingPage() {
             Whether you're just starting out or scaling up, we have a plan that
             fits your needs.
           </span>
-        </div>
+        </motion.div>
 
-        <div className="mt-16 space-y-12 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-x-8">
-          {plans.map((plan) => (
-            <div
+        <motion.div
+          ref={plansRef}
+          initial={{ opacity: 0, y: 40 }}
+          animate={isPlansInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mt-16 space-y-12 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-x-8"
+        >
+          {plans.map((plan, index) => (
+            <motion.div
               key={plan.name}
+              initial={{ opacity: 0, y: 40 }}
+              animate={isPlansInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.2 * (index + 1) }}
               className="relative bg-white rounded-2xl shadow-xl flex flex-col justify-between items-start"
             >
               <div className="p-8">
@@ -112,7 +138,7 @@ export default function PricingPage() {
                   className={`block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium ${
                     plan.name === "Pro"
                       ? "bg-indigo-600 text-white hover:bg-indigo-700"
-                      : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
+                      : "bg-indigo-300/40 text-indigo-700 hover:bg-indigo-300/60"
                   }`}
                 >
                   {plan.cta}
@@ -126,28 +152,33 @@ export default function PricingPage() {
                   </span>
                 </div>
               )}
-            </div>
+            </motion.div>
           ))}
-        </div>
-
-        <div className="mt-16 text-center flex flex-col items-center justify-center py-10">
-          <span className="text-2xl font-extrabold text-gray-900">
-            Need a custom solution?
-          </span>
-          <span className="mt-4 text-lg text-gray-600">
-            Our enterprise plan offers unlimited credits and the ability to
-            build extensive tools tailored to your needs.
-          </span>
-          <div className="mt-6">
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
-            >
-              Contact Us for Enterprise Solutions
-            </Link>
-          </div>
-        </div>
+        </motion.div>
       </div>
+      <motion.div
+        ref={customRef}
+        initial={{ opacity: 0, y: 40 }}
+        animate={isCustomInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, delay: 0.4 }}
+        className="mt-16 text-center flex flex-col items-center justify-center py-10"
+      >
+        <span className="text-2xl font-extrabold text-gray-900">
+          Need a custom solution?
+        </span>
+        <span className="mt-4 text-lg text-gray-600">
+          Our enterprise plan offers unlimited credits and the ability to build
+          extensive tools tailored to your needs.
+        </span>
+        <div className="mt-6">
+          <Link
+            href="/contact"
+            className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+          >
+            Contact Us for Enterprise Solutions
+          </Link>
+        </div>
+      </motion.div>
     </div>
   );
 }

@@ -1,6 +1,9 @@
 "use client";
+import { Puzzle, Settings, Users, ChevronRight } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import React from "react";
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
@@ -49,50 +52,51 @@ const titlesAndContext = [
     videoSrc: "",
   },
 ];
+
 export default function HomePage() {
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <BackgroundBeamsWithCollision className="min-h-screen relative w-full">
-        <div className="min-h-screen flex items-center justify-center dark:text-zinc-100 text-zinc-900">
+        <motion.div 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.8 }}
+          className="min-h-screen flex items-center justify-center dark:text-zinc-100 text-zinc-900"
+        >
           <TextAnimation />
-          <div className="rounded-full absolute bottom-10 border border-zinc-600 p-2 dark:text-zinc-400 animate-bounce">
+          <motion.div 
+            className="rounded-full absolute bottom-10 border border-zinc-600 p-2 dark:text-zinc-400"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+          >
             <ArrowDown />
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </BackgroundBeamsWithCollision>
-      <div className="bg-gradient-to-b from-blue-300 to-white dark:bg-gradient-to-b dark:from-blue-900 dark:to-black min-h-screen">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="bg-gradient-to-b from-blue-300 to-white dark:bg-gradient-to-b dark:from-blue-900 dark:to-black min-h-screen"
+      >
         <FeatureCarousel />
-      </div>
-      <div className="bg-white dark:bg-gradient-to-b dark:from-black dark:to-black">
+      </motion.div>
+      <motion.div 
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="bg-white dark:bg-gradient-to-b dark:from-black dark:to-black"
+      >
         <ListComponent />
-        {/* <div className="px-6 py-2">
-          <div className="bg-gradient-to-b from-indigo-400 to-zinc-100 dark:from-blue-400 dark:to-zinc-900 h-[40rem] w-full rounded-xl flex flex-col justify-center items-center gap-20 mb-10 border border-gray-200 dark:border-none">
-            <span className="text-white text-5xl font-bold drop-shadow-md">
-              Start your journey with SDET Genie today!
-            </span>
-            <div className="flex justify-center items-center gap-2">
-              <Link href="/signup">
-                <Button
-                  variant="outline"
-                  className="rounded-lg px-4 py-2 bg-gradient-to-br from-blue-500 to-purple-400 border-none hover:text-gray-200 flex justify-center items-center gap-2 h-12"
-                >
-                  <span className="text-xl font-semibold">Get Started</span>
-                  <ArrowUpRight className="text-white" />
-                </Button>
-              </Link>
-              <Link href="/products">
-                <Button
-                  variant="default"
-                  className="rounded-lg px-4 py-2 border-none h-12"
-                >
-                  <span className="text-xl font-medium">Learn More</span>
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div> */}
-      </div>
-    </>
+        <EnhancedB2BSection />
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -244,33 +248,237 @@ export function FeatureCarousel() {
 export function ListComponent() {
   return (
     <>
-      <div className="h-[60rem] w-full flex flex-col justify-start items-center mx-auto">
-        <span className="text-4xl font-semibold dark:text-zinc-100 text-zinc-900">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="h-[60rem] w-full flex flex-col justify-start items-center mx-auto"
+      >
+        <motion.span
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-4xl font-semibold dark:text-zinc-100 text-zinc-900"
+        >
           Get your{" "}
-          <span className="bg-gradient-to-br from-purple-400 via-indigo-400 to-blue-400 bg-clip-text text-transparent">
+          <motion.span
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="bg-gradient-to-br from-purple-400 via-indigo-400 to-blue-400 bg-clip-text text-transparent"
+          >
             Genie
-          </span>{" "}
+          </motion.span>{" "}
           to do your testing
-        </span>
-        <div className="grid grid-cols-3 gap-20 mt-20 justify-center items-center">
-          {[1, 2, 3].map((item) => (
-            <ListItem key={item} />
+        </motion.span>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="grid grid-cols-3 gap-20 mt-20 justify-center items-center"
+        >
+          {[1, 2, 3].map((item, index) => (
+            <motion.div
+              key={item}
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.8 + index * 0.2 }}
+            >
+              <ListItem />
+            </motion.div>
           ))}
-        </div>
-        <div className="grid grid-cols-2 gap-20 mt-20 justify-center items-center">
-          <ListItem />
-          <ListItem />
-        </div>
-      </div>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1.4 }}
+          className="grid grid-cols-2 gap-20 mt-20 justify-center items-center"
+        >
+          {[1, 2].map((item, index) => (
+            <motion.div
+              key={item}
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 1.6 + index * 0.2 }}
+            >
+              <ListItem />
+            </motion.div>
+          ))}
+        </motion.div>
+      </motion.div>
     </>
   );
 }
+
 export function ListItem() {
   return (
     <>
-      <div className="w-[400px] h-[300px] bg-white shadow dark:shadow-gray-100 rounded-2xl dark:bg-zinc-200 flex justify-center items-center border">
-        <span className="text-zinc-900">Sample Content here</span>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        transition={{ duration: 0.3 }}
+        className="w-[400px] h-[300px] bg-white shadow dark:shadow-gray-100 rounded-2xl dark:bg-zinc-200 flex justify-center items-center border"
+      >
+        <motion.span
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-zinc-900"
+        >
+          Sample Content here
+        </motion.span>
+      </motion.div>
     </>
+  );
+}
+
+const features = [
+  {
+    icon: <Puzzle className="w-12 h-12 text-indigo-500" />,
+    title: "Customized Framework",
+    description: "Tailored solutions based on your specific requirements",
+  },
+  {
+    icon: <Settings className="w-12 h-12 text-indigo-500" />,
+    title: "Flexible Features",
+    description: "Modify and adapt every feature to meet your unique needs",
+  },
+  {
+    icon: <Users className="w-12 h-12 text-indigo-500" />,
+    title: "Dedicated Support",
+    description: "Expert assistance throughout implementation and beyond",
+  },
+];
+
+export function EnhancedB2BSection() {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const controls = useAnimation();
+
+  useEffect(() => {
+    controls.start((i) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.2 },
+    }));
+  }, [controls]);
+
+  return (
+    <section className="py-24 bg-gradient-to-b from-white via-blue-50 to-white overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-5xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
+            WAIGENIE for Business
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Empower your enterprise with customized AI-driven QA solutions that
+            adapt to your unique challenges
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              custom={index}
+              initial={{ opacity: 0, y: 50 }}
+              animate={controls}
+            >
+              <Card
+                className="h-full transition-all duration-300 hover:shadow-xl bg-white/80 backdrop-blur-sm"
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
+                <CardContent className="p-8 flex flex-col items-center text-center">
+                  <motion.div
+                    animate={{
+                      scale: hoveredIndex === index ? 1.1 : 1,
+                    }}
+                    transition={{ duration: 0.3 }}
+                    className="mb-6"
+                  >
+                    {feature.icon}
+                  </motion.div>
+                  <h3 className="text-2xl font-semibold mb-4">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600">{feature.description}</p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="bg-white rounded-2xl shadow-2xl p-12 relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-100 rounded-full -mr-48 -mt-48 opacity-50" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-100 rounded-full -ml-48 -mb-48 opacity-50" />
+
+          <div className="relative z-10 flex flex-col md:flex-row items-center">
+            <div className="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+              <h3 className="text-3xl font-bold mb-6">
+                Tailored for Your Success
+              </h3>
+              <p className="text-gray-600 mb-8 text-lg">
+                At WAIGENIE, we understand that every business has unique
+                challenges. Our B2B solutions offer:
+              </p>
+              <ul className="space-y-4 mb-8">
+                {[
+                  "Customized frameworks",
+                  "Flexible features",
+                  "Scalable solutions",
+                ].map((item, index) => (
+                  <motion.li
+                    key={index}
+                    className="flex items-center text-lg"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.8 + index * 0.2 }}
+                  >
+                    <ChevronRight className="w-6 h-6 text-indigo-500 mr-2 flex-shrink-0" />
+                    <span>{item}</span>
+                  </motion.li>
+                ))}
+              </ul>
+              <Link
+                href={"/signup"}
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+              >
+                <span className="mr-2">Schedule a Consultation</span>
+                <ArrowRight className="w-5 h-5 inline-block" />
+              </Link>
+            </div>
+            <div className="md:w-1/2">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1, duration: 0.6 }}
+                className="relative"
+              >
+                <Image
+                  src="/placeholder.svg?height=400&width=600"
+                  alt="B2B Solutions Illustration"
+                  width={600}
+                  height={400}
+                  className="rounded-lg shadow-lg"
+                />
+                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600/20 to-purple-600/20 rounded-lg" />
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
   );
 }
