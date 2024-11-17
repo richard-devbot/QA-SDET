@@ -45,8 +45,8 @@ export default function TestIdea() {
 
   return (
     <div className="container mx-auto px-4 py-8 w-screen flex justify-center items-center gap-8">
-      <div className="w-1/2 bg-gray-300 p-8 rounded-md h-[calc(100vh-100px)]">
-        <h1 className="text-4xl font-bold text-black mb-8">
+      <div className="w-1/3 bg-blue-50 p-8 rounded-md h-[calc(100vh-100px)] overflow-y-auto shadow-lg">
+        <h1 className="text-xl font-bold text-black mb-2">
           Test Idea Generation
         </h1>
         <input
@@ -59,7 +59,7 @@ export default function TestIdea() {
         <button
           onClick={startBrowser}
           disabled={loading || browserStarted}
-          className="w-full bg-black text-white font-bold py-3 px-6 rounded-md hover:bg-gray-800 transition duration-300 mb-4"
+          className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition duration-300 shadow-lg transform hover:scale-[1.02] text-sm"
         >
           Start Testing Magic
         </button>
@@ -73,7 +73,6 @@ export default function TestIdea() {
                   : "bg-gray-200 text-black"
               }`}
             >
-              <FaRobot className="inline-block mr-2" />
               Automated Scenarios
             </button>
             <button
@@ -84,7 +83,6 @@ export default function TestIdea() {
                   : "bg-gray-200 text-black"
               }`}
             >
-              <FaEdit className="inline-block mr-2" />
               Manual Test Cases
             </button>
           </div>
@@ -97,7 +95,7 @@ export default function TestIdea() {
             <button
               onClick={generateScenarios}
               disabled={loading}
-              className="mt-4 w-full bg-black text-white font-bold py-3 px-6 rounded-md hover:bg-gray-800 transition duration-300"
+              className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition duration-300 shadow-lg transform hover:scale-[1.02] text-sm"
             >
               {mode === "auto"
                 ? "Generate Test Scenarios"
@@ -105,11 +103,19 @@ export default function TestIdea() {
             </button>
           </div>
         )}
+        {selectedElements.length > 0 && (
+          <pre className="bg-white p-4 rounded-md overflow-x-auto text-black border border-gray-300">
+            {JSON.stringify(selectedElements, null, 2)}
+          </pre>
+        )}
         {testScenarios && mode === "auto" && (
           <div className="mt-8">
             <h2 className="text-2xl font-bold text-black mb-4">
               Generated Test Scenarios
             </h2>
+            <pre className="bg-white p-4 rounded-md whitespace-pre-wrap text-black border border-gray-300">
+              {testScenarios}
+            </pre>
           </div>
         )}
         {manualTestCases && mode === "manual" && (
@@ -117,10 +123,13 @@ export default function TestIdea() {
             <h2 className="text-2xl font-bold text-black mb-4">
               Generated Manual Test Cases
             </h2>
+            <pre className="bg-white p-4 rounded-md whitespace-pre-wrap text-black border border-gray-300">
+              {manualTestCases}
+            </pre>
           </div>
         )}
       </div>
-      <div className="w-1/2 bg-gray-300 rounded-md h-[calc(100vh-100px)]">
+      <div className="w-2/3 bg-gray-50 rounded-md h-[calc(100vh-100px)] overflow-y-auto shadow-lg">
         {browserStarted && (
           <>
             <BrowserView
@@ -128,21 +137,6 @@ export default function TestIdea() {
               onElementsSelected={handleElementsSelected}
             />
           </>
-        )}
-        {selectedElements.length > 0 && (
-          <pre className="bg-white p-4 rounded-md overflow-x-auto text-black border border-gray-300">
-            {JSON.stringify(selectedElements, null, 2)}
-          </pre>
-        )}
-        {testScenarios && mode === "auto" && (
-          <pre className="bg-white p-4 rounded-md whitespace-pre-wrap text-black border border-gray-300">
-            {testScenarios}
-          </pre>
-        )}
-        {manualTestCases && mode === "manual" && (
-          <pre className="bg-white p-4 rounded-md whitespace-pre-wrap text-black border border-gray-300">
-            {manualTestCases}
-          </pre>
         )}
       </div>
     </div>

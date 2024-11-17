@@ -53,7 +53,7 @@ export default function Navbar() {
             </NavigationMenuItem>
 
             <NavigationMenuItem className="relative">
-              <NavigationMenuTrigger className="text-zinc-900 dark:text-white bg-transparent hover:bg-transparent px-4 py-2">
+              <NavigationMenuTrigger className="text-zinc-900 dark:text-white bg-transparent hover:bg-transparent px-4 py-2 font-normal">
                 Products
               </NavigationMenuTrigger>
               <NavigationMenuContent className="absolute left-1/2 -translate-x-1/2 rounded-md">

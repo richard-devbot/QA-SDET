@@ -73,8 +73,8 @@ export default function AutomationCodeGenerator() {
 
   return (
     <div className="container mx-auto px-4 py-8 w-screen flex justify-center items-center gap-8">
-      <div className="w-1/2 bg-gray-300 p-8 rounded-md h-[calc(100vh-100px)]">
-        <h1 className="text-4xl font-bold text-black mb-8">
+      <div className="w-1/3 bg-gray-50 p-8 rounded-md h-[calc(100vh-100px)] shadow-lg overflow-y-auto">
+        <h1 className="text-xl font-bold text-black mb-2">
           Generate QA Automation Scripts
         </h1>
         <input
@@ -87,7 +87,7 @@ export default function AutomationCodeGenerator() {
         <button
           onClick={browserStarted ? stopBrowser : startBrowser}
           disabled={loading}
-          className="w-full bg-black text-white font-bold py-3 px-6 rounded-md hover:bg-gray-800 transition duration-300 mb-4"
+          className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition duration-300 shadow-lg transform hover:scale-[1.02] text-sm mb-4"
         >
           {browserStarted ? "Stop Browser" : "Start Browser"}
         </button>
@@ -95,24 +95,22 @@ export default function AutomationCodeGenerator() {
         <div className="flex justify-center space-x-4 mb-4">
           <button
             onClick={() => setLanguage("Python")}
-            className={`px-4 py-2 rounded-md ${
+            className={`px-4 py-2 rounded-full text-xs shadow-lg transition-all duration-300 ${
               language === "Python"
-                ? "bg-black text-white"
-                : "bg-gray-200 text-black"
+                ? "bg-blue-600 text-white transform scale-105"
+                : "bg-blue-100 text-blue-600 hover:bg-blue-200"
             }`}
           >
-            <FaCode className="inline-block mr-2" />
             Python
           </button>
           <button
             onClick={() => setLanguage("Java")}
-            className={`px-4 py-2 rounded-md ${
+            className={`px-4 py-2 rounded-full text-xs shadow-lg transition-all duration-300 ${
               language === "Java"
-                ? "bg-black text-white"
-                : "bg-gray-200 text-black"
+                ? "bg-blue-600 text-white transform scale-105"
+                : "bg-blue-100 text-blue-600 hover:bg-blue-200"
             }`}
           >
-            <FaRobot className="inline-block mr-2" />
             Java
           </button>
         </div>
@@ -128,7 +126,7 @@ export default function AutomationCodeGenerator() {
         <button
           onClick={generateCode}
           disabled={loading || !browserStarted}
-          className="w-full bg-black text-white font-bold py-3 px-6 rounded-md hover:bg-gray-800 transition duration-300"
+          className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition duration-300 shadow-lg transform hover:scale-[1.02] text-sm"
         >
           {loading ? "Generating Code..." : "Generate Code"}
         </button>
@@ -145,7 +143,7 @@ export default function AutomationCodeGenerator() {
               download={`generated_test.${
                 language.toLowerCase() === "python" ? "py" : "java"
               }`}
-              className="w-full bg-black text-white font-bold py-3 px-6 rounded-md hover:bg-gray-800 transition duration-300 inline-block text-center"
+              className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition duration-300 shadow-lg transform hover:scale-[1.02] text-sm inline-block text-center"
             >
               Download {language} Code
             </a>
@@ -153,7 +151,7 @@ export default function AutomationCodeGenerator() {
         )}
       </div>
 
-      <div className="w-1/2 bg-gray-300 rounded-md h-[calc(100vh-100px)]">
+      <div className="w-1/3 bg-gray-50 p-8 rounded-md h-[calc(100vh-100px)] shadow-lg overflow-y-auto">
         {browserStarted && screenshot && (
           <img
             src={screenshot}

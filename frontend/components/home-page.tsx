@@ -61,14 +61,14 @@ export default function HomePage() {
       transition={{ duration: 0.5 }}
     >
       <BackgroundBeamsWithCollision className="min-h-screen relative w-full">
-        <motion.div 
+        <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.8 }}
           className="min-h-screen flex items-center justify-center dark:text-zinc-100 text-zinc-900"
         >
           <TextAnimation />
-          <motion.div 
+          <motion.div
             className="rounded-full absolute bottom-10 border border-zinc-600 p-2 dark:text-zinc-400"
             animate={{ y: [0, 10, 0] }}
             transition={{ repeat: Infinity, duration: 1.5 }}
@@ -77,7 +77,7 @@ export default function HomePage() {
           </motion.div>
         </motion.div>
       </BackgroundBeamsWithCollision>
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
@@ -86,7 +86,7 @@ export default function HomePage() {
       >
         <FeatureCarousel />
       </motion.div>
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
@@ -373,10 +373,13 @@ export function EnhancedB2BSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-5xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
-            WAIGENIE for Business
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <span className="text-5xl font-bold mb-6">
+            <span className="bg-gradient-to-br from-purple-400 via-indigo-400 to-blue-400 bg-clip-text text-transparent">
+              WAIGENIE
+            </span>{" "}
+            for Business
+          </span>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mt-5">
             Empower your enterprise with customized AI-driven QA solutions that
             adapt to your unique challenges
           </p>

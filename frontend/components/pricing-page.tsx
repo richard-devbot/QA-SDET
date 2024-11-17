@@ -59,8 +59,8 @@ export default function PricingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-blue-200/50 to-white py-32 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto min-h-screen mt-20">
+    <div className="min-h-screen bg-gradient-to-b from-white via-blue-200/50 to-white py-28 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto min-h-screen">
         <motion.div
           ref={titleRef}
           initial={{ opacity: 0, y: 20 }}

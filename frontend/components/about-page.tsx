@@ -69,7 +69,7 @@ export default function AboutPage() {
             transition={{ duration: 0.5 }}
             className="flex flex-col items-center justify-center gap-5 py-5"
           >
-            <span className="text-[4rem] font-bold">
+            <span className="text-5xl font-bold">
               About{" "}
               <span className="bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text font-bold">
                 WaiGenie
@@ -85,10 +85,12 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 50 }}
             animate={isVisionInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5 }}
-            className="flex justify-center items-center gap-44"
+            className="flex justify-center items-center gap-44 my-20"
           >
             <div className="flex flex-col items-start justify-start w-[450px] gap-10">
-              <span className="text-4xl text-[#0717A1]">Our Vision</span>
+              <span className="text-4xl font-bold text-[#0717A1]">
+                Our Vision
+              </span>
               <div className="flex flex-col gap-5">
                 <p className="text-justify text-xl">
                   At Waigenie, we envision a future where QA processes are
@@ -119,9 +121,9 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 50 }}
             animate={isMissionInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5 }}
-            className="flex flex-col items-center justify-start gap-10"
+            className="flex flex-col items-center justify-start gap-10 my-20"
           >
-            <span className="text-[3rem] text-[#0717A1]">Our Mission</span>
+            <span className="text-4xl font-bold text-[#0717A1]">Our Mission</span>
             <div className="bg-[#71B5E6] text-white px-10 py-5 max-w-5xl rounded-xl">
               <p className="p-10 text-center text-xl">
                 Empower QA teams with cutting-edge AI solutions tailored for
@@ -136,10 +138,10 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 50 }}
             animate={isServicesInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5 }}
-            className="max-w-6xl my-10"
+            className="max-w-6xl my-20"
           >
             <div className="mx-auto flex flex-col items-center justify-center gap-10">
-              <span className="text-5xl text-center text-zinc-900 mb-12">
+              <span className="text-5xl text-center text-zinc-900 mb-12 font-bold">
                 What{" "}
                 <span className="bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
                   WaiGenie
@@ -175,19 +177,19 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 50 }}
             animate={isWorkflowInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5 }}
-            className="flex flex-col items-center justify-center gap-10"
+            className="flex flex-col items-center justify-center gap-10 my-20"
           >
-            <span className="text-[3rem] text-[#5350FF] font-bold">
+            <span className="text-4xl font-bold text-[#5350FF]">
               How it works?
             </span>
-            <div className="flex items-center">
+            <div className="flex items-center gap-10">
               {[1, 2, 3, 4].map((step, index) => (
                 <motion.div
                   key={step}
                   initial={{ opacity: 0, y: 20 }}
                   animate={isWorkflowInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.5, delay: index * 0.2 }}
-                  className="w-[300px] min-h-[300px] flex flex-col justify-center items-center gap-5 p-2"
+                  className="w-[300px] min-h-[300px] flex flex-col justify-center items-center gap-8 p-2"
                 >
                   <div className="bg-[radial-gradient(50%_50%_at_50%_50%,_var(--tw-gradient-stops))] from-blue-400/70 to-blue-100/0.1 w-[150px] h-[150px] flex justify-center items-center">
                     <Image
@@ -197,7 +199,7 @@ export default function AboutPage() {
                       height={100}
                     />
                   </div>
-                  <div className="flex flex-col justify-center items-center gap-5">
+                  <div className="flex flex-col justify-center items-center gap-7">
                     <div className="flex justify-between items-center gap-2 h-10">
                       <span className="bg-[#5350FF] text-white rounded-full size-8 flex justify-center items-center p-2">
                         {step}
@@ -212,7 +214,7 @@ export default function AboutPage() {
                           : "Optimize"}
                       </span>
                     </div>
-                    <div className="text-center text-sm">
+                    <div className="text-center text-base">
                       {step === 1
                         ? "Create your Waigenie account and set up your organization profile."
                         : step === 2
@@ -232,12 +234,12 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 50 }}
             animate={isValuesInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5 }}
-            className="flex justify-center items-center gap-14 flex-col py-10"
+            className="flex justify-center items-center gap-14 flex-col py-20"
           >
-            <span className="text-[3rem] text-[#5350FF] font-bold">
+            <span className="text-4xl font-bold text-[#5350FF]">
               Our Values
             </span>
-            <div className="grid md:grid-cols-3 grid-cols-1 gap-5">
+            <div className="grid md:grid-cols-3 grid-cols-1 gap-10">
               {["Innovation", "Customer Success", "Collaboration"].map(
                 (value, index) => (
                   <motion.div

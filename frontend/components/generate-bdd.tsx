@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import axios from "axios";
+import { FaCode, FaEdit } from "react-icons/fa";
 
 export default function GenerateBDD() {
   const [userStory, setUserStory] = useState("");
@@ -34,8 +35,8 @@ export default function GenerateBDD() {
 
   return (
     <div className="container mx-auto px-4 py-8 w-screen flex justify-center items-center gap-8">
-      <div className="w-1/2 bg-gray-300 p-8 rounded-md h-[calc(100vh-100px)]">
-        <h1 className="text-4xl font-bold text-black mb-8">
+      <div className="w-1/3 bg-gray-50 p-8 rounded-md h-[calc(100vh-100px)]">
+        <h1 className="text-xl font-bold text-black mb-2">
           Generate BDD Gherkin Feature Steps
         </h1>
         <textarea
@@ -43,27 +44,29 @@ export default function GenerateBDD() {
           onChange={(e) => setUserStory(e.target.value)}
           placeholder="Enter user story"
           className="w-full p-3 mb-4 bg-white border border-gray-300 rounded-md text-black placeholder-gray-400 focus:outline-none focus:border-gray-500"
-          rows={5}
+          rows={3}
         />
         <div className="mb-6">
-          <h3 className="text-black text-lg mb-2">Generation Method:</h3>
-          <div className="flex justify-center space-x-4 mb-4">
+          <h3 className="text-black text-lg font-bold mb-2">
+            Generation Method:
+          </h3>
+          <div className="flex justify-center space-x-4 my-4">
             <button
               onClick={() => setGenerationMethod("direct")}
-              className={`px-4 py-2 rounded-md ${
+              className={`px-4 w-2/6 py-2 rounded-full text-xs shadow-lg transition-all duration-300 ${
                 generationMethod === "direct"
-                  ? "bg-black text-white"
-                  : "bg-gray-200 text-black"
+                  ? "bg-blue-600 text-white transform scale-105"
+                  : "bg-blue-100 text-blue-600 hover:bg-blue-200"
               }`}
             >
               Direct Gherkin
             </button>
             <button
               onClick={() => setGenerationMethod("manual-first")}
-              className={`px-4 py-2 rounded-md ${
+              className={`px-4 w-4/6 py-2 rounded-full text-xs shadow-lg transition-all duration-300 ${
                 generationMethod === "manual-first"
-                  ? "bg-black text-white"
-                  : "bg-gray-200 text-black"
+                  ? "bg-blue-600 text-white transform scale-105"
+                  : "bg-blue-100 text-blue-600 hover:bg-blue-200"
               }`}
             >
               Manual Test Cases + BDD Gherkin Steps
@@ -73,24 +76,24 @@ export default function GenerateBDD() {
 
         {generationMethod === "direct" && (
           <div className="mb-6">
-            <h3 className="text-black text-lg mb-2">Detail Level:</h3>
+            <h3 className="text-black font-bold text-lg mb-2">Detail Level:</h3>
             <div className="flex justify-center space-x-4">
               <button
                 onClick={() => setDetailLevel("Simple")}
-                className={`px-4 py-2 rounded-md ${
+                className={`px-4 py-2 rounded-full text-xs shadow-lg transition-all duration-300 ${
                   detailLevel === "Simple"
-                    ? "bg-black text-white"
-                    : "bg-gray-200 text-black"
+                    ? "bg-blue-600 text-white transform scale-105"
+                    : "bg-blue-100 text-blue-600 hover:bg-blue-200"
                 }`}
               >
                 Simple
               </button>
               <button
                 onClick={() => setDetailLevel("Detailed")}
-                className={`px-4 py-2 rounded-md ${
+                className={`px-4 py-2 rounded-full text-xs shadow-lg transition-all duration-300 ${
                   detailLevel === "Detailed"
-                    ? "bg-black text-white"
-                    : "bg-gray-200 text-black"
+                    ? "bg-blue-600 text-white transform scale-105"
+                    : "bg-blue-100 text-blue-600 hover:bg-blue-200"
                 }`}
               >
                 Detailed
@@ -102,35 +105,31 @@ export default function GenerateBDD() {
         <button
           onClick={generateGherkinFeature}
           disabled={loading}
-          className="w-full bg-black text-white font-bold py-3 px-6 rounded-md hover:bg-gray-800 transition duration-300"
+          className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition duration-300 shadow-lg transform hover:scale-[1.02] text-sm"
         >
-          {loading ? "Generating..." : "Generate Gherkin Feature"}
+          {loading ? "Generating..." : <>Generate Gherkin Feature</>}
         </button>
+      </div>
+      <div className="w-2/3 bg-gray-50 p-8 rounded-md h-[calc(100vh-100px)] shadow-lg overflow-y-auto">
         {manualTestCases && (
-          <div className="p-4">
+          <div className="mt-8">
             <h2 className="text-2xl font-bold text-black mb-4">
               Generated Manual Test Cases
             </h2>
+            <pre className="bg-white p-4 rounded-md overflow-x-auto text-black border border-gray-300 whitespace-pre-wrap">
+              {manualTestCases}
+            </pre>
           </div>
         )}
         {gherkinFeature && (
-          <div className="p-4">
+          <div className="mt-8">
             <h2 className="text-2xl font-bold text-black mb-4">
               Generated Gherkin Feature
             </h2>
+            <pre className="bg-white p-4 rounded-md overflow-x-auto text-black border border-gray-300 whitespace-pre-wrap">
+              {gherkinFeature}
+            </pre>
           </div>
-        )}
-      </div>
-      <div className="w-1/2 bg-gray-300 rounded-md h-[calc(100vh-100px)]">
-        {manualTestCases && (
-          <pre className="bg-white p-4 rounded-md overflow-x-auto text-black border border-gray-300 whitespace-pre-wrap">
-            {manualTestCases}
-          </pre>
-        )}
-        {gherkinFeature && (
-          <pre className="bg-white p-4 rounded-md overflow-x-auto text-black border border-gray-300 whitespace-pre-wrap">
-            {gherkinFeature}
-          </pre>
         )}
       </div>
     </div>

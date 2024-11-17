@@ -99,8 +99,8 @@ export default function IdentifyEl() {
 
   return (
     <div className="container mx-auto px-4 py-8 w-screen flex justify-center items-center gap-8">
-      <div className="w-1/2 bg-gray-300 p-8 rounded-md h-[calc(100vh-100px)]">
-        <h1 className="text-4xl font-bold text-black mb-8">
+      <div className="w-1/3 bg-purple-50 p-8 rounded-md h-[calc(100vh-100px)] shadow-lg">
+        <h1 className="text-xl font-bold text-black mb-4">
           Identify Page Elements
         </h1>
         <input
@@ -108,19 +108,19 @@ export default function IdentifyEl() {
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="Enter URL to inspect"
-          className="w-full p-3 mb-4 bg-white border border-gray-300 rounded-md text-black placeholder-gray-400 focus:outline-none focus:border-gray-500"
+          className="w-full p-2 mb-2 bg-white border border-gray-300 rounded-md text-black placeholder-gray-400 focus:outline-none focus:border-gray-500 text-sm"
         />
         <input
           type="text"
           value={outputFileName}
           onChange={(e) => setOutputFileName(e.target.value)}
           placeholder="Output CSV file name"
-          className="w-full p-3 mb-4 bg-white border border-gray-300 rounded-md text-black placeholder-gray-400 focus:outline-none focus:border-gray-500"
+          className="w-full p-2 mb-2 bg-white border border-gray-300 rounded-md text-black placeholder-gray-400 focus:outline-none focus:border-gray-500 text-sm"
         />
         <button
           onClick={loadUrl}
           disabled={loading}
-          className="w-full bg-black text-white font-bold py-3 px-6 rounded-md hover:bg-gray-800 transition duration-300 mb-4"
+          className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition duration-300 shadow-lg transform hover:scale-[1.02] text-sm"
         >
           {loading ? "Loading..." : "Load URL"}
         </button>
@@ -128,7 +128,7 @@ export default function IdentifyEl() {
           <button
             onClick={identifyElements}
             disabled={loading}
-            className="w-full bg-black text-white font-bold py-3 px-6 rounded-md hover:bg-gray-800 transition duration-300"
+            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition duration-300 shadow-lg transform hover:scale-[1.02] text-sm"
           >
             {loading ? (
               <span>Identifying Elements ({Math.round(progress * 100)}%)</span>
@@ -148,7 +148,7 @@ export default function IdentifyEl() {
         )}
       </div>
 
-      <div className="w-1/2 bg-gray-300 rounded-md h-[calc(100vh-100px)]">
+      <div className="w-2/3 bg-blue-50 rounded-md h-[calc(100vh-100px)] shadow-lg">
         {proxyHtml && (
           <iframe
             ref={iframeRef}

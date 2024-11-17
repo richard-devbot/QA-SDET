@@ -97,7 +97,7 @@ export default function ServicesPage() {
 
   return (
     <>
-      <main className="min-h-screen bg-gradient-to-br from-white-50 via-blue-50 to-white-50 overflow-hidden mt-32">
+      <main className="min-h-screen bg-gradient-to-br from-white-50 via-blue-50 to-white-50 overflow-hidden mt-28">
         <motion.div
           ref={titleRef}
           initial={{ opacity: 0, y: 20 }}

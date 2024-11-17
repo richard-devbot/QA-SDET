@@ -25,6 +25,8 @@ import Link, { LinkProps } from "next/link";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { signout } from "@/actions/auth";
+import AgentExplorer from "./agent-explorer";
+import { FaRobot } from "react-icons/fa";
 
 export function DashboardNavbar({
   user,
@@ -39,11 +41,11 @@ export function DashboardNavbar({
     router.push("/");
   };
 
-  const [activeLink, setActiveLink] = useState("TestIdea");
+  const [activeLink, setActiveLink] = useState("IdeaForge");
 
   const links = [
     {
-      label: "TestIdea",
+      label: "IdeaForge",
       href: "#",
       icon: (
         <>
@@ -52,7 +54,7 @@ export function DashboardNavbar({
       ),
     },
     {
-      label: "GenerateBDD",
+      label: "CucumberCraft",
       href: "#",
       icon: (
         <>
@@ -61,7 +63,16 @@ export function DashboardNavbar({
       ),
     },
     {
-      label: "IdentifyEl",
+      label: "WebTrekker",
+      href: "#",
+      icon: (
+        <>
+          <FaRobot className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        </>
+      ),
+    },
+    {
+      label: "DomDetective",
       href: "#",
       icon: (
         <>
@@ -70,7 +81,7 @@ export function DashboardNavbar({
       ),
     },
     {
-      label: "AutomateCode",
+      label: "AutoScribe",
       href: "#",
       icon: (
         <>
@@ -82,20 +93,24 @@ export function DashboardNavbar({
 
   const linkComponents = [
     {
-      label: "TestIdea",
+      label: "IdeaForge",
       component: <TestIdea />,
     },
     {
-      label: "GenerateBDD",
+      label: "CucumberCraft",
       component: <GenerateBDD />,
     },
     {
-      label: "IdentifyEl",
+      label: "DomDetective",
       component: <IdentifyEl />,
     },
     {
-      label: "AutomateCode",
+      label: "AutoScribe",
       component: <AutomateCode />,
+    },
+    {
+      label: "WebTrekker",
+      component: <AgentExplorer />,
     },
   ];
 
@@ -146,7 +161,7 @@ export function DashboardNavbar({
             </div>
             <Button
               onClick={handleSignout}
-              className="bg-transparent hover:bg-neutral-200 dark:hover:bg-neutral-700 shadow-none border-none flex items-start gap-2 p-2 w-full"
+              className="bg-transparent hover:bg-neutral-200 dark:hover:bg-neutral-700 shadow-none border-none flex items-center justify-center gap-2 p-2 w-full"
               variant="outline"
             >
               <IconLogout className="h-5 w-5 text-neutral-700 dark:text-neutral-200" />
@@ -163,7 +178,7 @@ export function DashboardNavbar({
           </div>
         </SidebarBody>
       </Sidebar>
-      <div className="flex-1">
+      <div className="flex-1 bg-gradient-to-br from-blue-50 via-blue-200 to-blue-100">
         {linkComponents.find((link) => link.label === activeLink)?.component}
       </div>
     </div>

@@ -1,13 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import {
-  Brain,
-  Zap,
-  Code,
-  CheckCircle,
-  ArrowRight,
-} from "lucide-react";
+import { Brain, Zap, Code, CheckCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
@@ -26,8 +20,8 @@ export default function IdeaForge() {
     >
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Hero Section */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-32 mb-20 min-h-screen">
-          <motion.div 
+        <div className="flex flex-col md:flex-row items-center justify-between gap-32 mb-20 min-h-[85vh]">
+          <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -37,7 +31,7 @@ export default function IdeaForge() {
               initial={{ y: -20 }}
               animate={{ y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600"
+              className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 h-20"
             >
               IdeaForge
             </motion.h1>
@@ -57,8 +51,8 @@ export default function IdeaForge() {
               transition={{ duration: 0.3 }}
               className="flex justify-start"
             >
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
               >
                 Try Demo
@@ -94,7 +88,7 @@ export default function IdeaForge() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mb-20 min-h-96"
+          className="mb-32"
         >
           <motion.h2
             initial={{ y: 20, opacity: 0 }}
@@ -146,7 +140,9 @@ export default function IdeaForge() {
                     >
                       {feature.icon}
                     </motion.div>
-                    <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                    <h3 className="text-xl font-semibold mb-2">
+                      {feature.title}
+                    </h3>
                     <p className="text-gray-600">{feature.description}</p>
                   </CardContent>
                 </Card>
@@ -161,7 +157,7 @@ export default function IdeaForge() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mb-20 flex flex-col items-center"
+          className=" flex flex-col items-center my-32"
         >
           <span className="text-4xl text-center font-bold mb-12">Benefits</span>
           <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 max-w-4xl mx-auto">
@@ -205,7 +201,7 @@ export default function IdeaForge() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center"
+          className="text-center mt-32"
         >
           <motion.h2
             initial={{ scale: 0.9 }}
@@ -222,7 +218,8 @@ export default function IdeaForge() {
             transition={{ delay: 0.2 }}
             className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto"
           >
-            Start using IdeaForge today to revolutionize your test scenario generation.
+            Start using IdeaForge today to revolutionize your test scenario
+            generation.
           </motion.p>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
