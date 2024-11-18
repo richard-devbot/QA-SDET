@@ -15,7 +15,9 @@ const BrowserView: React.FC<BrowserViewProps> = ({
   const [currentUrl, setCurrentUrl] = useState(url);
 
   useEffect(() => {
-    setProxyUrl(`http://localhost:5000/proxy?url=${encodeURIComponent(currentUrl)}`);
+    setProxyUrl(
+      `http://localhost:5000/proxy?url=${encodeURIComponent(currentUrl)}`
+    );
   }, [currentUrl]);
 
   useEffect(() => {
@@ -30,7 +32,9 @@ const BrowserView: React.FC<BrowserViewProps> = ({
   }, [onElementsSelected]);
 
   const handleReload = () => {
-    setProxyUrl(`http://localhost:5000/proxy?url=${encodeURIComponent(currentUrl)}`);
+    setProxyUrl(
+      `http://localhost:5000/proxy?url=${encodeURIComponent(currentUrl)}`
+    );
   };
 
   const handleUrlSubmit = (e: React.FormEvent) => {
@@ -40,7 +44,7 @@ const BrowserView: React.FC<BrowserViewProps> = ({
 
   return (
     <div className="browser-view flex flex-col">
-      <div className="flex items-center gap-2 p-2 bg-gray-100 rounded-t-xl h-14">
+      {/* <div className="flex items-center gap-2 p-2 bg-gray-100 rounded-t-xl h-14">
         <button
           onClick={handleReload}
           className="p-2 hover:bg-gray-200 rounded-full"
@@ -56,7 +60,7 @@ const BrowserView: React.FC<BrowserViewProps> = ({
             placeholder="Enter URL"
           />
         </form>
-      </div>
+      </div> */}
       <iframe
         src={proxyUrl}
         style={{

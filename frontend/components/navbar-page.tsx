@@ -11,7 +11,8 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
+} from "@radix-ui/react-navigation-menu";
+import { CaretDownIcon } from "@radix-ui/react-icons";
 
 export default function Navbar() {
   return (
@@ -35,7 +36,7 @@ export default function Navbar() {
         </Link>
 
         <NavigationMenu className="hidden md:flex">
-          <NavigationMenuList>
+          <NavigationMenuList className="flex items-center">
             <NavigationMenuItem>
               <Link href="/about" legacyBehavior passHref>
                 <NavigationMenuLink className="text-zinc-900 dark:text-white px-4 py-2">
@@ -53,14 +54,18 @@ export default function Navbar() {
             </NavigationMenuItem>
 
             <NavigationMenuItem className="relative">
-              <NavigationMenuTrigger className="text-zinc-900 dark:text-white bg-transparent hover:bg-transparent px-4 py-2 font-normal">
+              <NavigationMenuTrigger className="group flex select-none items-center justify-between gap-0.5 rounded px-3 py-2 font-normal leading-none text-zinc-900 dark:text-white outline-none hover:bg-violet3 focus:shadow-[0_0_0_2px] focus:shadow-violet7">
                 Products
+                <CaretDownIcon
+                  className="relative top-px text-violet10 transition-transform duration-[250] ease-in group-data-[state=open]:-rotate-180"
+                  aria-hidden
+                />
               </NavigationMenuTrigger>
-              <NavigationMenuContent className="absolute left-1/2 -translate-x-1/2 rounded-md">
+              <NavigationMenuContent className="absolute left-1/2 -translate-x-1/2 rounded-md bg-white shadow-[0_10px_38px_-10px_rgba(22,23,24,0.35),0_10px_20px_-15px_rgba(22,23,24,0.2)]">
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="grid grid-cols-2 gap-2 p-2 w-[400px] rounded-full"
+                  className="grid grid-cols-2 gap-2 p-2 w-[300px] rounded-full"
                 >
                   <NavigationMenuLink
                     href="/products/IdeaForge"
@@ -91,6 +96,12 @@ export default function Navbar() {
                     className="block px-4 py-2 text-sm text-zinc-900 dark:text-white hover:bg-blue-100 dark:hover:bg-neutral-800 rounded-md"
                   >
                     WebTrekker
+                  </NavigationMenuLink>
+                  <NavigationMenuLink
+                    href="/products"
+                    className="block px-4 py-2 text-sm text-zinc-900 dark:text-white hover:bg-blue-100 dark:hover:bg-neutral-800 rounded-md"
+                  >
+                    All Products
                   </NavigationMenuLink>
                 </motion.div>
               </NavigationMenuContent>

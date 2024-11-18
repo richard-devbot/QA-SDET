@@ -27,6 +27,7 @@ import { motion } from "framer-motion";
 import { signout } from "@/actions/auth";
 import AgentExplorer from "./agent-explorer";
 import { FaRobot } from "react-icons/fa";
+import { Code, FileCode2, Info, Lightbulb, SearchCode } from "lucide-react";
 
 export function DashboardNavbar({
   user,
@@ -49,7 +50,7 @@ export function DashboardNavbar({
       href: "#",
       icon: (
         <>
-          <IconListCheck className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+          <Lightbulb className="text-neutral-700 dark:text-neutral-200 size-10 flex-shrink-0" />
         </>
       ),
     },
@@ -58,7 +59,7 @@ export function DashboardNavbar({
       href: "#",
       icon: (
         <>
-          <IconCode className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+          <FileCode2 className="text-neutral-700 dark:text-neutral-200 h-5 w-4 flex-shrink-0" />
         </>
       ),
     },
@@ -67,7 +68,7 @@ export function DashboardNavbar({
       href: "#",
       icon: (
         <>
-          <FaRobot className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+          <SearchCode className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
         </>
       ),
     },
@@ -76,7 +77,7 @@ export function DashboardNavbar({
       href: "#",
       icon: (
         <>
-          <IconSearch className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+          <Info className="text-neutral-700 dark:text-neutral-200 size-5 flex-shrink-0" />
         </>
       ),
     },
@@ -85,7 +86,7 @@ export function DashboardNavbar({
       href: "#",
       icon: (
         <>
-          <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+          <Code className="text-neutral-700 dark:text-neutral-200 h-4 w-5 flex-shrink-0" />
         </>
       ),
     },
@@ -138,7 +139,7 @@ export function DashboardNavbar({
                   className="bg-transparent shadow-none border-none flex-shrink-0 p-0"
                   variant="outline"
                 >
-                  <SidebarLink link={link} />
+                  <SidebarLink link={link} className="" />
                 </Button>
               ))}
             </div>
@@ -178,7 +179,7 @@ export function DashboardNavbar({
           </div>
         </SidebarBody>
       </Sidebar>
-      <div className="flex-1 bg-gradient-to-br from-blue-50 via-blue-200 to-blue-100">
+      <div className="flex-1 bg-gradient-to-br from-blue-50 via-blue-200 to-blue-100 overflow-y-auto">
         {linkComponents.find((link) => link.label === activeLink)?.component}
       </div>
     </div>

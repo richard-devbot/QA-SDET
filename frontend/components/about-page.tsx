@@ -123,7 +123,9 @@ export default function AboutPage() {
             transition={{ duration: 0.5 }}
             className="flex flex-col items-center justify-start gap-10 my-20"
           >
-            <span className="text-4xl font-bold text-[#0717A1]">Our Mission</span>
+            <span className="text-4xl font-bold text-[#0717A1]">
+              Our Mission
+            </span>
             <div className="bg-[#71B5E6] text-white px-10 py-5 max-w-5xl rounded-xl">
               <p className="p-10 text-center text-xl">
                 Empower QA teams with cutting-edge AI solutions tailored for
@@ -182,14 +184,14 @@ export default function AboutPage() {
             <span className="text-4xl font-bold text-[#5350FF]">
               How it works?
             </span>
-            <div className="flex items-center gap-10">
+            <div className="flex flex-col lg:flex-row items-center gap-5 lg:gap-10">
               {[1, 2, 3, 4].map((step, index) => (
                 <motion.div
                   key={step}
                   initial={{ opacity: 0, y: 20 }}
                   animate={isWorkflowInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.5, delay: index * 0.2 }}
-                  className="w-[300px] min-h-[300px] flex flex-col justify-center items-center gap-8 p-2"
+                  className="w-[200px] lg:w-[300px] min-h-[200px] lg:min-h-[300px] flex flex-col justify-center items-center gap-2 lg:gap-8 p-2"
                 >
                   <div className="bg-[radial-gradient(50%_50%_at_50%_50%,_var(--tw-gradient-stops))] from-blue-400/70 to-blue-100/0.1 w-[150px] h-[150px] flex justify-center items-center">
                     <Image
@@ -199,7 +201,7 @@ export default function AboutPage() {
                       height={100}
                     />
                   </div>
-                  <div className="flex flex-col justify-center items-center gap-7">
+                  <div className="flex flex-col justify-center items-center gap-2 lg:gap-7">
                     <div className="flex justify-between items-center gap-2 h-10">
                       <span className="bg-[#5350FF] text-white rounded-full size-8 flex justify-center items-center p-2">
                         {step}
