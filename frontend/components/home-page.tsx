@@ -8,12 +8,16 @@ import {
   FileText,
   Search,
   Brain,
+  Info,
   Code,
   BriefcaseBusinessIcon,
   Building2,
   BarChart,
   ShieldCheck,
   Handshake,
+  Lightbulb,
+  SearchCode,
+  FileCode2,
 } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
@@ -36,7 +40,7 @@ import Lenis from "lenis";
 const products = [
   {
     title: "IdeaForge",
-    icon: Brain,
+    icon: Lightbulb,
     description:
       "Generate comprehensive test scenarios using advanced AI algorithms.",
     color: "from-indigo-400 to-purple-500",
@@ -44,7 +48,7 @@ const products = [
   },
   {
     title: "DOMDetective",
-    icon: Search,
+    icon: Info,
     description:
       "Automatically identify and analyze web elements with precision.",
     color: "from-blue-400 to-indigo-500",
@@ -68,7 +72,7 @@ const products = [
   },
   {
     title: "WebTrekker",
-    icon: Globe,
+    icon: SearchCode,
     description: "Explore and test complex user journeys with AI assistance.",
     color: "from-violet-400 to-purple-500",
     link: "/products/WebTrekker",
@@ -151,9 +155,9 @@ const titlesAndContext = [
     videoSrc: "",
   },
   {
-    title: "Make use of SDET Genie's AI-Powered Web Agent",
+    title: "Make use of Waigenie's AI-Powered Web Agent",
     context:
-      "Use our AI-powered web agent to demonstrate the capabilities of SDET-Genie. Enter an objective and URL to start the web agent demo and see how it interacts with the web page. Use this feature to showcase the power of SDET-Genie to potential clients and stakeholders.",
+      "Use our AI-powered web agent to demonstrate the capabilities of Waigenie. Enter an objective and URL to start the web agent demo and see how it interacts with the web page. Use this feature to showcase the power of Waigenie to potential clients and stakeholders.",
     videoSrc: "",
   },
 ];
@@ -471,7 +475,7 @@ export function ListComponent() {
                   </CardContent>
                   <CardFooter className="bg-gray-50 p-4">
                     <Button variant="outline" className="w-full" asChild>
-                      <Link href={`${product.link}/demo`}>Try Demo</Link>
+                      <Link href={`signup`}>Try Demo</Link>
                     </Button>
                   </CardFooter>
                 </Card>
