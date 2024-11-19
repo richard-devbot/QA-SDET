@@ -36,6 +36,7 @@ import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-w
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Lenis from "lenis";
+import { useRouter } from "next/navigation";
 
 const products = [
   {
@@ -397,6 +398,7 @@ export function FeatureCarousel() {
 
 export function ListComponent() {
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
+  const router = useRouter();
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white py-12 px-4 sm:px-6 lg:px-8">
@@ -463,14 +465,14 @@ export function ListComponent() {
                       }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Button
-                        className={`bg-gradient-to-r ${product.color} text-white`}
-                        asChild
+                      <a
+                        href={product.link}
+                        className={`bg-gradient-to-r ${product.color} text-white hover:bg-gradient-to-r hover:${product.color} transition-colors duration-300 flex items-center px-3 py-2 rounded-md`}
                       >
-                        <Link href={product.link}>
+                        <span className="flex items-center justify-center">
                           Learn More <ArrowRight className="ml-2 w-4 h-4" />
-                        </Link>
-                      </Button>
+                        </span>
+                      </a>
                     </motion.div>
                   </CardContent>
                   <CardFooter className="bg-gray-50 p-4">

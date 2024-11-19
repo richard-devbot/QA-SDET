@@ -16,6 +16,9 @@ export default function AgentExplorer() {
 
   const startBrowser = async () => {
     setLoading(true);
+    setError("");
+    setResults([]);
+    setScreenshot("");
     try {
       await axios.post(
         "http://localhost:5000/api/agent-explorer/start-browser",
@@ -33,6 +36,9 @@ export default function AgentExplorer() {
 
   const stopBrowser = async () => {
     setLoading(true);
+    setError("");
+    setResults([]);
+    setScreenshot("");
     try {
       await axios.post("http://localhost:5000/api/agent-explorer/stop-browser");
       setBrowserStarted(false);
@@ -50,7 +56,7 @@ export default function AgentExplorer() {
     setLoading(true);
     setError("");
     setResults([]);
-
+    setScreenshot("");
     try {
       const response = await axios.post(
         "http://localhost:5000/api/agent-explorer/run-web-agent",
@@ -155,6 +161,13 @@ export default function AgentExplorer() {
       </div>
 
       <div className="w-2/3 bg-purple-50 rounded-md h-[calc(100vh-100px)] overflow-y-auto shadow-lg">
+        {loading && (
+          <div className="flex justify-center items-center h-full">
+            <div className="p-3 animate-spin drop-shadow-2xl bg-gradient-to-bl from-pink-400 via-purple-400 to-indigo-600 size-24 aspect-square rounded-full">
+              <div className="rounded-full h-full w-full bg-slate-100 dark:bg-zinc-900 backdrop-blur-md"></div>
+            </div>
+          </div>
+        )}
         {browserStarted && screenshot && (
           <img
             src={screenshot}

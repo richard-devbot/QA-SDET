@@ -38,7 +38,10 @@ export default function AutomationCodeGenerator() {
 
   const generateCode = async () => {
     setLoading(true);
+    setGeneratedCode("");
     try {
+      await stopBrowser();
+      await startBrowser();
       const response = await axios.post(
         "http://localhost:5000/api/generate-code",
         {
@@ -48,6 +51,7 @@ export default function AutomationCodeGenerator() {
         }
       );
       setGeneratedCode(response.data.code);
+      await stopBrowser();
     } catch (error) {
       console.error("Error generating code:", error);
     }
@@ -85,13 +89,13 @@ export default function AutomationCodeGenerator() {
             placeholder="Enter URL"
             className="w-full p-3 mb-4 bg-white border border-gray-300 rounded-md text-black placeholder-gray-400 focus:outline-none focus:border-gray-500"
           />
-          {/* <button
+          <button
             onClick={browserStarted ? stopBrowser : startBrowser}
             disabled={loading}
             className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition duration-300 shadow-lg transform hover:scale-[1.02] text-sm mb-4"
           >
             {browserStarted ? "Stop Browser" : "Start Browser"}
-          </button> */}
+          </button>
 
           <div className="flex justify-center space-x-4 mb-4">
             <button
@@ -163,11 +167,11 @@ export default function AutomationCodeGenerator() {
         </div>
       </div>
       {generatedCode && (
-        <div className="w-[80vw] bg-gray-50 rounded-md shadow-lg container mb-10">
-          <h2 className="text-2xl font-bold text-black my-4">
+        <div className="w-full max-w-6xl mx-auto bg-gray-50 rounded-md shadow-lg p-6 mb-4">
+          <h2 className="text-2xl font-bold text-black">
             Generated {language} Code
           </h2>
-          <pre className="bg-white p-4 rounded-md overflow-x-auto text-black border border-gray-300 whitespace-pre-wrap">
+          <pre className="bg-white p-4 rounded-md overflow-x-auto text-black border border-gray-300 whitespace-pre-wrap mt-4 h-[550px] overflow-y-scroll">
             {generatedCode}
           </pre>
         </div>

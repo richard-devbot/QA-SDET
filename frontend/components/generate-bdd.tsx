@@ -14,6 +14,8 @@ export default function GenerateBDD() {
 
   const generateGherkinFeature = async () => {
     setLoading(true);
+    setGherkinFeature("");
+    setManualTestCases("");
     try {
       const response = await axios.post(
         "http://localhost:5000/api/generate-gherkin",
@@ -111,25 +113,36 @@ export default function GenerateBDD() {
         </button>
       </div>
       <div className="w-2/3 px-6 bg-gray-50 rounded-md h-[calc(100vh-100px)] shadow-lg overflow-y-scroll">
-        {manualTestCases && (
-          <div className="bg-gray-50">
-            <span className="text-2xl font-bold text-black mb-4">
-              Generated Manual Test Cases
-            </span>
-            <pre className="bg-white p-4 rounded-md text-black border border-gray-300 whitespace-pre-wrap">
-              {manualTestCases}
-            </pre>
+        {loading && (
+          <div className="flex justify-center items-center h-full">
+            <div className="p-3 animate-spin drop-shadow-2xl bg-gradient-to-bl from-pink-400 via-purple-400 to-indigo-600 size-24 aspect-square rounded-full">
+              <div className="rounded-full h-full w-full bg-slate-100 dark:bg-zinc-900 backdrop-blur-md"></div>
+            </div>
           </div>
         )}
+        {manualTestCases && (
+          <>
+            <div className="bg-gray-50 py-2 flex flex-col items-center">
+              <span className="text-2xl font-bold text-black mt-4">
+                Generated Manual Test Cases
+              </span>
+              <pre className="bg-white p-4 rounded-md text-black border border-gray-300 whitespace-pre-wrap my-4">
+                {manualTestCases}
+              </pre>
+            </div>
+          </>
+        )}
         {gherkinFeature && (
-          <div className="">
-            <span className="text-2xl font-bold text-black mb-4 sticky top-0 bg-gray-50">
-              Generated Gherkin Feature
-            </span>
-            <pre className="bg-white p-4 rounded-md text-black border border-gray-300 whitespace-pre-wrap">
-              {gherkinFeature}
-            </pre>
-          </div>
+          <>
+            <div className="bg-gray-50 py-2 flex flex-col items-center">
+              <span className="text-2xl font-bold text-black mt-4">
+                Generated Gherkin Feature
+              </span>
+              <pre className="bg-white p-4 rounded-md text-black border border-gray-300 whitespace-pre-wrap my-4">
+                {gherkinFeature}
+              </pre>
+            </div>
+          </>
         )}
       </div>
     </div>
