@@ -17,7 +17,7 @@ const phrases = [
   "Inspect your Web Elements",
   "Generate Gherkin Scenarios",
   "Generate Automation Scripts",
-  "Explore Web Agents",
+  "Explore AI Web Agents",
 ];
 
 const titlesAndContext = [
@@ -455,7 +455,7 @@ export function EnhancedB2BSection() {
                 ))}
               </ul>
               <Link
-                href={"/signup"}
+                href={"/Consultation"}
                 className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
               >
                 <span className="mr-2">Schedule a Consultation</span>

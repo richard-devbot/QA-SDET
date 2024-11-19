@@ -90,14 +90,14 @@ const Footer: React.FC = () => {
           <div className="dark:text-white text-zinc-900 w-[150px]">
             <span className="text-lg font-semibold mb-4">Products</span>
             <ul className="text-gray-600 dark:text-gray-300 ml-2 mt-4">
-              <li className="mb-2">
+              {/* <li className="mb-2">
                 <Link
                   href="/products"
                   className="hover:text-gray-900 hover:dark:text-gray-100"
                 >
                   Products
                 </Link>
-              </li>
+              </li> */}
               <li className="mb-2">
                 <Link
                   href="/products/IdeaForge"

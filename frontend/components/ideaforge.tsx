@@ -5,6 +5,15 @@ import { Brain, Zap, Code, CheckCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
+import Link from "next/link";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@radix-ui/react-navigation-menu";
 
 export default function IdeaForge() {
   const { scrollYProgress } = useScroll();
@@ -45,6 +54,8 @@ export default function IdeaForge() {
               algorithms, ensuring thorough coverage of your application's
               functionality.
             </motion.p>
+            <div className="flex flex-wrap gap-4">
+            <Link href="/signup">  
             <motion.div
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -58,6 +69,23 @@ export default function IdeaForge() {
                 Try Demo
               </Button>
             </motion.div>
+            </Link>
+            <Link href="/">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.3 }}
+              className="flex justify-start"
+            >
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-blue-200 to-indigo-300 hover:from-blue-300 hover:to-indigo-400 text-black"
+              >
+                Learn more
+              </Button>
+            </motion.div>
+            </Link>
+            </div>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -221,6 +249,7 @@ export default function IdeaForge() {
             Start using IdeaForge today to revolutionize your test scenario
             generation.
           </motion.p>
+          <Link href="/signup">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
               size="lg"
@@ -229,6 +258,7 @@ export default function IdeaForge() {
               Get Started <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
           </motion.div>
+          </Link>
         </motion.section>
       </main>
     </motion.div>

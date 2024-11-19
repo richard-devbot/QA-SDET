@@ -5,6 +5,7 @@ import { Globe, Compass, Map, CheckCircle, ArrowRight } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function WebTrekker() {
   const { scrollYProgress } = useScroll();
@@ -43,19 +44,38 @@ export default function WebTrekker() {
             >
               Leverage AI to automatically explore and test complex user journeys, uncovering edge cases and issues that manual testing might miss.
             </motion.p>
+            <div className="flex flex-wrap gap-4">
+            <Link href="/signup">  
             <motion.div
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.3 }}
               className="flex justify-start"
             >
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
               >
                 Try Demo
               </Button>
             </motion.div>
+            </Link>
+            <Link href="/">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.3 }}
+              className="flex justify-start"
+            >
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-blue-200 to-indigo-300 hover:from-blue-300 hover:to-indigo-400 text-black"
+              >
+                Learn more
+              </Button>
+            </motion.div>
+            </Link>
+            </div>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -213,6 +233,7 @@ export default function WebTrekker() {
           >
             Start using WebTrekker today to uncover hidden issues and optimize user journeys.
           </motion.p>
+          <Link href="/signup">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
               size="lg"
@@ -221,6 +242,7 @@ export default function WebTrekker() {
               Get Started <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
           </motion.div>
+          </Link>
         </motion.section>
       </main>
     </motion.div>
