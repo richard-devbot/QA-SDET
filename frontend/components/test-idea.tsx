@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import BrowserView from "@/components/browser-view";
-import { FaRobot, FaCode, FaBug, FaEdit } from "react-icons/fa";
 
 export default function TestIdea() {
   const [url, setUrl] = useState("");
@@ -23,6 +22,8 @@ export default function TestIdea() {
 
   const generateScenarios = async () => {
     setLoading(true);
+    setTestScenarios("");
+    setManualTestCases("");
     try {
       const response = await axios.post(
         "http://localhost:5000/api/generate-scenarios",
@@ -42,10 +43,6 @@ export default function TestIdea() {
     }
     setLoading(false);
   };
-
-  console.log("selectedElements", selectedElements);
-  console.log("testScenarios", testScenarios);
-  console.log("manualTestCases", manualTestCases);
 
   return (
     <>
@@ -69,23 +66,23 @@ export default function TestIdea() {
             Start Testing Magic
           </button>
           {browserStarted && (
-            <div className="flex justify-center space-x-4 mb-4">
+            <div className="flex justify-center space-x-4 my-4">
               <button
                 onClick={() => setMode("auto")}
-                className={`px-4 py-2 rounded-md ${
+                className={`px-4 py-2 rounded-full text-xs shadow-lg transition-all duration-300 ${
                   mode === "auto"
-                    ? "bg-black text-white"
-                    : "bg-gray-200 text-black"
+                    ? "bg-blue-600 text-white transform scale-105"
+                    : "bg-blue-100 text-blue-600 hover:bg-blue-200"
                 }`}
               >
                 Automated Scenarios
               </button>
               <button
                 onClick={() => setMode("manual")}
-                className={`px-4 py-2 rounded-md ${
+                className={`px-4 py-2 rounded-full text-xs shadow-lg transition-all duration-300 ${
                   mode === "manual"
-                    ? "bg-black text-white"
-                    : "bg-gray-200 text-black"
+                    ? "bg-blue-600 text-white transform scale-105"
+                    : "bg-blue-100 text-blue-600 hover:bg-blue-200"
                 }`}
               >
                 Manual Test Cases
@@ -97,6 +94,9 @@ export default function TestIdea() {
               <h2 className="text-2xl font-bold text-black mb-4">
                 Selected Elements
               </h2>
+              <pre className="bg-white p-4 rounded-md overflow-x-auto text-black border border-gray-300 mb-2">
+                {JSON.stringify(selectedElements, null, 2)}
+              </pre>
               <button
                 onClick={generateScenarios}
                 disabled={loading}
@@ -107,11 +107,6 @@ export default function TestIdea() {
                   : "Generate Manual Test Cases"}
               </button>
             </div>
-          )}
-          {selectedElements.length > 0 && (
-            <pre className="bg-white p-4 rounded-md overflow-x-auto text-black border border-gray-300">
-              {JSON.stringify(selectedElements, null, 2)}
-            </pre>
           )}
         </div>
         <div className="w-2/3 bg-gray-50 rounded-md h-[calc(100vh-100px)] shadow-lg">
@@ -125,24 +120,31 @@ export default function TestIdea() {
           )}
         </div>
       </div>
-      {(testScenarios || manualTestCases) && (
-        <div className="w-full bg-gray-50 rounded-md shadow-lg container">
+      {(testScenarios || manualTestCases || loading) && (
+        <div className="w-full bg-gray-50 rounded-md shadow-lg max-w-6xl mx-auto flex flex-col mb-5">
+          {loading && (
+            <div className="p-6">
+              <span className="text-2xl font-bold text-black pb-4">
+                Loading...
+              </span>
+            </div>
+          )}
           {testScenarios && mode === "auto" && (
-            <div className="mt-8">
-              <h2 className="text-2xl font-bold text-black my-4">
+            <div className="p-6">
+              <span className="text-2xl font-bold text-black pb-4">
                 Generated Test Scenarios
-              </h2>
-              <pre className="bg-white p-4 rounded-md whitespace-pre-wrap text-black border border-gray-300">
+              </span>
+              <pre className="bg-white p-4 rounded-md whitespace-pre-wrap text-black border border-gray-300 mt-4">
                 {testScenarios}
               </pre>
             </div>
           )}
           {manualTestCases && mode === "manual" && (
-            <div className="mt-8">
-              <h2 className="text-2xl font-bold text-black mb-4">
+            <div className="p-6">
+              <span className="text-2xl font-bold text-black">
                 Generated Manual Test Cases
-              </h2>
-              <pre className="bg-white p-4 rounded-md whitespace-pre-wrap text-black border border-gray-300">
+              </span>
+              <pre className="bg-white p-4 rounded-md whitespace-pre-wrap text-black border border-gray-300 mt-4">
                 {manualTestCases}
               </pre>
             </div>

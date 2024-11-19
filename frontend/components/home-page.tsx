@@ -1,16 +1,121 @@
 "use client";
-import { Puzzle, Settings, Users, ChevronRight } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Puzzle,
+  Settings,
+  Users,
+  ChevronRight,
+  Globe,
+  FileText,
+  Search,
+  Brain,
+  Code,
+  BriefcaseBusinessIcon,
+  Building2,
+  BarChart,
+  ShieldCheck,
+  Handshake,
+} from "lucide-react";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence, useAnimation } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import {
+  motion,
+  AnimatePresence,
+  useAnimation,
+  MotionValue,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import React from "react";
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowRight } from "lucide-react";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import Navbar from "./navbar-page";
-import SessionProvider from "./session-provider";
+import Lenis from "lenis";
+
+const products = [
+  {
+    title: "IdeaForge",
+    icon: Brain,
+    description:
+      "Generate comprehensive test scenarios using advanced AI algorithms.",
+    color: "from-indigo-400 to-purple-500",
+    link: "/products/IdeaForge",
+  },
+  {
+    title: "DOMDetective",
+    icon: Search,
+    description:
+      "Automatically identify and analyze web elements with precision.",
+    color: "from-blue-400 to-indigo-500",
+    link: "/products/DomDetective",
+  },
+  {
+    title: "CucumberCraft",
+    icon: FileText,
+    description:
+      "Transform user stories into clear, concise Gherkin feature files.",
+    color: "from-emerald-400 to-teal-500",
+    link: "/products/CucumberCraft",
+  },
+  {
+    title: "AutoScribe",
+    icon: Code,
+    description:
+      "Generate test automation scripts in multiple languages automatically.",
+    color: "from-cyan-400 to-blue-500",
+    link: "/products/AutoScribe",
+  },
+  {
+    title: "WebTrekker",
+    icon: Globe,
+    description: "Explore and test complex user journeys with AI assistance.",
+    color: "from-violet-400 to-purple-500",
+    link: "/products/WebTrekker",
+  },
+];
+
+const productsForCards = [
+  {
+    title: "IdeaForge",
+    src: "",
+    description:
+      "Generate comprehensive test scenarios using advanced AI algorithms.",
+    color: "from-indigo-400 to-purple-500",
+    url: "/products/IdeaForge",
+  },
+  {
+    title: "DOMDetective",
+    src: "",
+    description:
+      "Automatically identify and analyze web elements with precision.",
+    color: "from-blue-400 to-indigo-500",
+    url: "/products/DomDetective",
+  },
+  {
+    title: "CucumberCraft",
+    src: "",
+    description:
+      "Transform user stories into clear, concise Gherkin feature files.",
+    color: "from-emerald-400 to-teal-500",
+    url: "/products/CucumberCraft",
+  },
+  {
+    title: "AutoScribe",
+    src: "",
+    description:
+      "Generate test automation scripts in multiple languages automatically.",
+    color: "from-cyan-400 to-blue-500",
+    url: "/products/AutoScribe",
+  },
+  {
+    title: "WebTrekker",
+    src: "",
+    description: "Explore and test complex user journeys with AI assistance.",
+    color: "from-violet-400 to-purple-500",
+    url: "/products/WebTrekker",
+  },
+];
 
 const phrases = [
   "Test your Web Ideas",
@@ -54,6 +159,22 @@ const titlesAndContext = [
 ];
 
 export default function HomePage() {
+  const container = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start start", "end end"],
+  });
+
+  useEffect(() => {
+    const lenis = new Lenis();
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+  });
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -86,6 +207,31 @@ export default function HomePage() {
       >
         <FeatureCarousel />
       </motion.div>
+      {/* <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="bg-gradient-to-b from-blue-300 to-white dark:bg-gradient-to-b dark:from-blue-900 dark:to-black min-h-screen"
+      >
+        <main ref={container} className="relative">
+          {productsForCards.map((product, i) => {
+            // Calculate target scale based on project index
+            const targetScale = 1 - (productsForCards.length - i) * 0.05;
+
+            return (
+              <CardComponent
+                key={`p_${i}`}
+                i={i}
+                {...product}
+                progress={scrollYProgress}
+                range={[i * 0.25, 1]}
+                targetScale={targetScale}
+              />
+            );
+          })}
+        </main>
+      </motion.div> */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -246,67 +392,330 @@ export function FeatureCarousel() {
 }
 
 export function ListComponent() {
+  const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   return (
     <>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="h-[60rem] w-full flex flex-col justify-start items-center mx-auto"
-      >
-        <motion.span
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-4xl font-semibold dark:text-zinc-100 text-zinc-900"
-        >
-          Get your{" "}
-          <motion.span
-            initial={{ scale: 0.8 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="bg-gradient-to-br from-purple-400 via-indigo-400 to-blue-400 bg-clip-text text-transparent"
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
           >
-            Genie
-          </motion.span>{" "}
-          to do your testing
-        </motion.span>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="grid grid-cols-3 gap-20 mt-20 justify-center items-center"
-        >
-          {[1, 2, 3].map((item, index) => (
-            <motion.div
-              key={item}
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.8 + index * 0.2 }}
-            >
-              <ListItem />
-            </motion.div>
-          ))}
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.4 }}
-          className="grid grid-cols-2 gap-20 mt-20 justify-center items-center"
-        >
-          {[1, 2].map((item, index) => (
-            <motion.div
-              key={item}
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 1.6 + index * 0.2 }}
-            >
-              <ListItem />
-            </motion.div>
-          ))}
-        </motion.div>
-      </motion.div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              Get your{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+                Genie
+              </span>{" "}
+              to do your testing
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Choose from our suite of AI-powered testing tools to automate and
+              enhance your testing workflow
+            </p>
+          </motion.div>
+
+          <div className="flex flex-wrap justify-center items-center gap-24">
+            {products.map((product, index) => (
+              <motion.div
+                key={product.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Card
+                  className="h-full overflow-hidden group cursor-pointer w-[300px]"
+                  onMouseEnter={() => setHoveredProduct(product.title)}
+                  onMouseLeave={() => setHoveredProduct(null)}
+                >
+                  <CardContent className="p-6 relative">
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-br ${product.color} opacity-10 group-hover:opacity-20 transition-opacity duration-300`}
+                    />
+                    <motion.div
+                      className="relative z-10"
+                      initial={false}
+                      animate={{
+                        y: hoveredProduct === product.title ? -20 : 0,
+                        opacity: hoveredProduct === product.title ? 0 : 1,
+                      }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <product.icon
+                        className={`w-16 h-16 mb-4 bg-gradient-to-br ${product.color} rounded-full p-3 text-white`}
+                      />
+                      <h2 className="text-2xl font-bold mb-2">
+                        {product.title}
+                      </h2>
+                      <p className="text-gray-600">{product.description}</p>
+                    </motion.div>
+                    <motion.div
+                      className="absolute inset-0 flex items-center justify-center"
+                      initial={false}
+                      animate={{
+                        y: hoveredProduct === product.title ? 0 : 20,
+                        opacity: hoveredProduct === product.title ? 1 : 0,
+                      }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <Button
+                        className={`bg-gradient-to-r ${product.color} text-white`}
+                        asChild
+                      >
+                        <Link href={product.link}>
+                          Learn More <ArrowRight className="ml-2 w-4 h-4" />
+                        </Link>
+                      </Button>
+                    </motion.div>
+                  </CardContent>
+                  <CardFooter className="bg-gray-50 p-4">
+                    <Button variant="outline" className="w-full" asChild>
+                      <Link href={`${product.link}/demo`}>Try Demo</Link>
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
     </>
+  );
+}
+
+// interface CardProps {
+//   i: number;
+//   title: string;
+//   description: string;
+//   src: string;
+//   url: string;
+//   color: string;
+//   progress: MotionValue<number>;
+//   range: number[];
+//   targetScale: number;
+// }
+
+// const CardComponent: React.FC<CardProps> = ({
+//   i,
+//   title,
+//   description,
+//   src,
+//   url,
+//   color,
+//   progress,
+//   range,
+//   targetScale,
+// }) => {
+//   const container = useRef<HTMLDivElement>(null);
+
+//   const { scrollYProgress } = useScroll({
+//     target: container,
+//     offset: ["start end", "start start"],
+//   });
+
+//   const imageScale = useTransform(scrollYProgress, [0, 1], [2, 1]);
+//   const scale = useTransform(progress, range, [1, targetScale]);
+
+//   return (
+//     <div
+//       ref={container}
+//       className="h-screen flex items-center justify-center sticky top-0"
+//     >
+//       <motion.div
+//         style={{
+//           scale,
+//           top: `calc(-5vh + ${i * 25}px)`,
+//         }}
+//         className={`flex flex-col relative top-[-25%] h-[500px] w-[1000px] rounded-[25px] p-[50px] origin-top bg-gradient-to-br ${color}`}
+//       >
+//         <h2 className="text-center m-0 text-[28px]">{title}</h2>
+//         <div className="flex h-full mt-[50px] gap-[50px]">
+//           <div className="w-[40%] relative top-[10%]">
+//             <p className="text-base first-letter:text-[28px] first-letter:font-['Title']">
+//               {description}
+//             </p>
+//             <span className="flex items-center gap-[5px]">
+//               <a
+//                 href={url}
+//                 target="_blank"
+//                 rel="noopener noreferrer"
+//                 className="text-xs underline cursor-pointer"
+//               >
+//                 See more
+//               </a>
+//               <svg
+//                 width="22"
+//                 height="12"
+//                 viewBox="0 0 22 12"
+//                 fill="none"
+//                 xmlns="http://www.w3.org/2000/svg"
+//               >
+//                 <path
+//                   d="M21.5303 6.53033C21.8232 6.23744 21.8232 5.76256 21.5303 5.46967L16.7574 0.696699C16.4645 0.403806 15.9896 0.403806 15.6967 0.696699C15.4038 0.989592 15.4038 1.46447 15.6967 1.75736L19.9393 6L15.6967 10.2426C15.4038 10.5355 15.4038 11.0104 15.6967 11.3033C15.9896 11.5962 16.4645 11.5962 16.7574 11.3033L21.5303 6.53033ZM0 6.75L21 6.75V5.25L0 5.25L0 6.75Z"
+//                   fill="black"
+//                 />
+//               </svg>
+//             </span>
+//           </div>
+//           <div className="relative w-[60%] h-full rounded-[25px] overflow-hidden">
+//             <motion.div className="w-full h-full" style={{ scale: imageScale }}>
+//               <Image
+//                 fill
+//                 src={`/images/${src}`}
+//                 alt="image"
+//                 className="object-cover"
+//               />
+//             </motion.div>
+//           </div>
+//         </div>
+//       </motion.div>
+//     </div>
+//   );
+// };
+
+export function B2BAnimation() {
+  const [key, setKey] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setKey((prevKey) => prevKey + 1);
+    }, 5000); // Reset animation every 5 seconds
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const centralCircleVariants = {
+    initial: { scale: 1.5, opacity: 1 },
+    shrink: {
+      scale: 1,
+      opacity: 1,
+      transition: { duration: 1, delay: 1 },
+    },
+  };
+
+  const centralLogoVariants = {
+    initial: { scale: 1.5, opacity: 1 },
+    shrink: {
+      scale: 1,
+      opacity: 1,
+      transition: { duration: 1, delay: 1 },
+    },
+  };
+
+  const lineVariants = {
+    hidden: { pathLength: 0, opacity: 0 },
+    visible: {
+      pathLength: 1,
+      opacity: 1,
+      transition: { duration: 1, delay: 2 },
+    },
+  };
+
+  const outerCircleVariants = {
+    hidden: { scale: 0, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: { duration: 0.5, delay: 3 },
+    },
+  };
+
+  const icons = [
+    { Icon: Building2, label: "Business" },
+    { Icon: Users, label: "Customers" },
+    { Icon: BarChart, label: "Analytics" },
+    { Icon: ShieldCheck, label: "Security" },
+    { Icon: Globe, label: "Global" },
+    { Icon: Building2, label: "Business" }, // Add an extra icon to match the number of circles
+  ];
+
+  return (
+    <div className="w-full h-[500px] bg-gradient-to-br from-white to-purple-100 flex items-center justify-center">
+      <motion.svg
+        key={key}
+        viewBox="-250 -250 500 500"
+        className="w-full h-full max-w-[500px]"
+      >
+        {/* Central circle */}
+        <motion.circle
+          cx="0"
+          cy="0"
+          r="60"
+          className="stroke-purple-600 fill-white"
+          strokeWidth="2"
+          variants={centralCircleVariants}
+          initial="initial"
+          animate="shrink"
+        />
+
+        {/* Company logo */}
+        <motion.foreignObject
+          x="-20"
+          y="-20"
+          width="40"
+          height="40"
+          variants={centralLogoVariants}
+          initial="initial"
+          animate="shrink"
+        >
+          <Image
+            src="/logo.png"
+            alt="Company Logo"
+            width={40}
+            height={40}
+            className="rounded-full"
+          />
+        </motion.foreignObject>
+
+        {/* Lines and outer circles */}
+        {[0, 72, 144, 216, 288].map((angle, index) => (
+          <motion.g key={angle}>
+            {/* Line */}
+            <motion.line
+              variants={lineVariants}
+              initial="hidden"
+              animate="visible"
+              x1={Math.cos((angle * Math.PI) / 180) * 60}
+              y1={Math.sin((angle * Math.PI) / 180) * 60}
+              x2={Math.cos((angle * Math.PI) / 180) * 170}
+              y2={Math.sin((angle * Math.PI) / 180) * 170}
+              className="stroke-purple-400"
+              strokeWidth="2"
+            />
+
+            {/* Outer circle */}
+            <motion.g
+              variants={outerCircleVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              <circle
+                cx={Math.cos((angle * Math.PI) / 180) * 180}
+                cy={Math.sin((angle * Math.PI) / 180) * 180}
+                r="40"
+                className="stroke-purple-600 fill-white"
+                strokeWidth="2"
+              />
+              <foreignObject
+                x={Math.cos((angle * Math.PI) / 180) * 180 - 20}
+                y={Math.sin((angle * Math.PI) / 180) * 180 - 20}
+                width="40"
+                height="40"
+              >
+                <div className="w-full h-full flex items-center justify-center">
+                  {(index + 1) % 2 === 0 ? (
+                    <Handshake className="w-6 h-6 text-zinc-800" />
+                  ) : (
+                    <BriefcaseBusinessIcon className="w-6 h-6 text-zinc-800" />
+                  )}
+                </div>
+              </foreignObject>
+            </motion.g>
+          </motion.g>
+        ))}
+      </motion.svg>
+    </div>
   );
 }
 
@@ -375,7 +784,7 @@ export function EnhancedB2BSection() {
         >
           <span className="text-5xl font-bold mb-6">
             <span className="bg-gradient-to-br from-purple-400 via-indigo-400 to-blue-400 bg-clip-text text-transparent">
-              WAIGENIE
+              WaiGenie
             </span>{" "}
             for Business
           </span>
@@ -469,14 +878,8 @@ export function EnhancedB2BSection() {
                 transition={{ delay: 1, duration: 0.6 }}
                 className="relative"
               >
-                <Image
-                  src="/placeholder.svg?height=400&width=600"
-                  alt="B2B Solutions Illustration"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg"
-                />
-                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600/20 to-purple-600/20 rounded-lg" />
+                <B2BAnimation />
+                <div className="absolute inset-0 bg-transparent rounded-lg" />
               </motion.div>
             </div>
           </div>

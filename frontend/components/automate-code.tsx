@@ -85,13 +85,13 @@ export default function AutomationCodeGenerator() {
             placeholder="Enter URL"
             className="w-full p-3 mb-4 bg-white border border-gray-300 rounded-md text-black placeholder-gray-400 focus:outline-none focus:border-gray-500"
           />
-          <button
+          {/* <button
             onClick={browserStarted ? stopBrowser : startBrowser}
             disabled={loading}
             className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition duration-300 shadow-lg transform hover:scale-[1.02] text-sm mb-4"
           >
             {browserStarted ? "Stop Browser" : "Start Browser"}
-          </button>
+          </button> */}
 
           <div className="flex justify-center space-x-4 mb-4">
             <button
@@ -127,7 +127,7 @@ export default function AutomationCodeGenerator() {
           <button
             onClick={generateCode}
             disabled={loading || !browserStarted}
-            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition duration-300 shadow-lg transform hover:scale-[1.02] text-sm"
+            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition duration-300 shadow-lg transform hover:scale-[1.02] text-sm cursor-pointer"
           >
             {loading ? "Generating Code..." : "Generate Code"}
           </button>

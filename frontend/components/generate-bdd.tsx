@@ -110,22 +110,22 @@ export default function GenerateBDD() {
           {loading ? "Generating..." : <>Generate Gherkin Feature</>}
         </button>
       </div>
-      <div className="w-2/3 p-8 bg-gray-50 rounded-md h-[calc(100vh-100px)] shadow-lg overflow-y-scroll">
+      <div className="w-2/3 px-6 bg-gray-50 rounded-md h-[calc(100vh-100px)] shadow-lg overflow-y-scroll">
         {manualTestCases && (
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-black mb-4 sticky top-0 bg-gray-50 py-2">
+          <div className="bg-gray-50">
+            <span className="text-2xl font-bold text-black mb-4">
               Generated Manual Test Cases
-            </h2>
+            </span>
             <pre className="bg-white p-4 rounded-md text-black border border-gray-300 whitespace-pre-wrap">
               {manualTestCases}
             </pre>
           </div>
         )}
         {gherkinFeature && (
-          <div className="relative">
-            <h2 className="text-2xl font-bold text-black mb-4 sticky top-0 bg-gray-50 py-2">
+          <div className="">
+            <span className="text-2xl font-bold text-black mb-4 sticky top-0 bg-gray-50">
               Generated Gherkin Feature
-            </h2>
+            </span>
             <pre className="bg-white p-4 rounded-md text-black border border-gray-300 whitespace-pre-wrap">
               {gherkinFeature}
             </pre>

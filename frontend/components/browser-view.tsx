@@ -66,10 +66,9 @@ const BrowserView: React.FC<BrowserViewProps> = ({
         style={{
           width: "100%",
           border: "none",
-          borderRadius: "0 0 10px 10px",
         }}
         sandbox="allow-scripts allow-same-origin"
-        className="w-full h-[calc(100vh-120px)]"
+        className="w-full h-[calc(100vh-100px)] rounded-md"
       />
     </div>
   );

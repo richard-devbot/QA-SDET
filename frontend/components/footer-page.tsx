@@ -1,8 +1,12 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { DiscordLogoIcon, InstagramLogoIcon } from "@radix-ui/react-icons";
-import { FaFacebook } from "react-icons/fa";
+import {
+  DiscordLogoIcon,
+  InstagramLogoIcon,
+  TwitterLogoIcon,
+} from "@radix-ui/react-icons";
+import { FaFacebook, FaTwitter } from "react-icons/fa";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight } from "lucide-react";
@@ -45,7 +49,7 @@ const Footer: React.FC = () => {
               />
               <span className="text-2xl mt-2 font-bold">Waigenie</span>
             </span>
-            <span className="text-gray-600 dark:text-gray-400">
+            <span className="text-gray-600 dark:text-gray-400 max-w-[350px]">
               We are dedicated to providing high-quality services and products
               to our customers.
             </span>
@@ -156,11 +160,11 @@ const Footer: React.FC = () => {
               <li className="hover:translate-x-2 transition-transform">
                 <Link
                   href=""
-                  aria-label="facebook"
+                  aria-label="twitter"
                   className="flex justify-start items-center gap-2 w-fit"
                 >
-                  <FaFacebook className="size-5" />
-                  <span>Facebook</span>
+                  <TwitterLogoIcon className="size-5" />
+                  <span>Twitter (Now X)</span>
                 </Link>
               </li>
               <li className="hover:translate-x-2 transition-transform">
