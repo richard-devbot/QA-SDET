@@ -61,13 +61,13 @@ export default function CucumberCraft() {
             >
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 rounded-full"
               >
                 Try Demo
               </Button>
             </motion.div>
             </Link>
-            <Link href="/">
+            {/* <Link href="/">
             <motion.div
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -81,7 +81,7 @@ export default function CucumberCraft() {
                 Learn more
               </Button>
             </motion.div>
-            </Link>
+            </Link> */}
             </div>
           </motion.div>
           <motion.div
@@ -250,9 +250,9 @@ export default function CucumberCraft() {
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
               size="lg"
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+              className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 rounded-full"
             >
-              Get Started <ArrowRight className="ml-2 w-5 h-5" />
+              Start Crafting Your Gherkin Steps Now <ArrowRight className="ml-1 size-6" />
             </Button>
           </motion.div>
           </Link>

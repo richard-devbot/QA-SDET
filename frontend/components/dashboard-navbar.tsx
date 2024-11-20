@@ -2,16 +2,6 @@
 "use client";
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "./ui/sidebar"; // Assuming SidebarLink is imported here
-import {
-  IconArrowLeft,
-  IconBrandTabler,
-  IconSettings,
-  IconUserBolt,
-  IconListCheck,
-  IconCode,
-  IconSearch,
-  IconLogout,
-} from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -27,7 +17,7 @@ import { motion } from "framer-motion";
 import { signout } from "@/actions/auth";
 import AgentExplorer from "./agent-explorer";
 import { FaRobot } from "react-icons/fa";
-import { Code, FileCode2, Info, Lightbulb, SearchCode } from "lucide-react";
+import { Code, FileCode2, Info, Lightbulb, SearchCode, LogOut } from "lucide-react";
 
 export function DashboardNavbar({
   user,
@@ -165,7 +155,7 @@ export function DashboardNavbar({
               className="bg-transparent hover:bg-neutral-200 dark:hover:bg-neutral-700 shadow-none border-none flex items-center justify-center gap-2 p-2 w-full"
               variant="outline"
             >
-              <IconLogout className="h-5 w-5 text-neutral-700 dark:text-neutral-200" />
+              <LogOut className="h-5 w-5 text-neutral-700 dark:text-neutral-200" />
               {open && (
                 <motion.span
                   initial={{ opacity: 0 }}

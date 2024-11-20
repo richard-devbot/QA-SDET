@@ -18,6 +18,7 @@ import {
   Lightbulb,
   SearchCode,
   FileCode2,
+  ArrowUpRight,
 } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
@@ -344,14 +345,14 @@ export function FeatureCarousel() {
         <div className="flex justify-start items-center gap-2">
           <button
             onClick={prevSlide}
-            className="bg-transparent p-2 rounded-full hover:text-zinc-400 transition-colors border dark:border-zinc-200 border-zinc-900"
+            className="bg-transparent p-2 rounded-full hover:text-zinc-400 transition-colors border dark:border-zinc-200 border-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800"
             aria-label="Previous slide"
           >
             <ArrowLeft className="w-6 h-6 dark:text-zinc-100 group-hover:text-zinc-600 group-hover:dark:text-zinc-400 text-zinc-900" />
           </button>
           <button
             onClick={nextSlide}
-            className="bg-transparent p-2 rounded-full hover:text-zinc-400 transition-colors border dark:border-zinc-200 border-zinc-900 group"
+            className="bg-transparent p-2 rounded-full hover:text-zinc-400 transition-colors border dark:border-zinc-200 border-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 group"
             aria-label="Next slide"
           >
             <ArrowRight className="w-6 h-6 dark:text-zinc-100 group-hover:text-zinc-600 group-hover:dark:text-zinc-400 text-zinc-900" />
@@ -464,19 +465,20 @@ export function ListComponent() {
                         opacity: hoveredProduct === product.title ? 1 : 0,
                       }}
                       transition={{ duration: 0.3 }}
+                      onClick={() => {router.push(product.link)}}
                     >
                       <a
                         href={product.link}
-                        className={`bg-gradient-to-r ${product.color} text-white hover:bg-gradient-to-r hover:${product.color} transition-colors duration-300 flex items-center px-3 py-2 rounded-md`}
+                        className={`bg-gradient-to-r ${product.color} text-white hover:bg-gradient-to-r hover:${product.color} transition-colors duration-300 flex items-center px-3 py-2 rounded-full`}
                       >
                         <span className="flex items-center justify-center">
-                          Learn More <ArrowRight className="ml-2 w-4 h-4" />
+                          Learn More <ArrowUpRight className="ml-1 w-4 h-4" />
                         </span>
                       </a>
                     </motion.div>
                   </CardContent>
                   <CardFooter className="bg-gray-50 p-4">
-                    <Button variant="outline" className="w-full" asChild>
+                    <Button variant="outline" className="w-full rounded-full" asChild>
                       <Link href={`signup`}>Try Demo</Link>
                     </Button>
                   </CardFooter>
@@ -871,7 +873,7 @@ export function EnhancedB2BSection() {
               </ul>
               <Link
                 href={"/Consultation"}
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
                 <span className="mr-2">Schedule a Consultation</span>
                 <ArrowRight className="w-5 h-5 inline-block" />

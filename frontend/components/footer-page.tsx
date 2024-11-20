@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
           <div>
             <Link
               href={"/signup"}
-              className="bg-indigo-600 text-white rounded-lg transition duration-300 shadow-none hover:bg-indigo-700 hover:text-white hover:shadow-lg border-none px-5 py-3 flex items-center gap-2"
+              className="bg-indigo-600 text-white rounded-full transition duration-300 shadow-none hover:bg-indigo-700 hover:text-white hover:shadow-lg border-none px-5 py-3 flex items-center gap-2"
             >
               Start Testing Now
               <ArrowUpRight />
