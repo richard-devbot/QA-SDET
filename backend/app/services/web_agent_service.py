@@ -69,7 +69,7 @@ def run_web_agent(objective: str, driver, max_retries=3, retry_delay=5):
                 while step_retry_count < max_retries:
                     try:
                         result = agent.run(objective)
-                        screenshot = driver.get_screenshot_as_png()
+                        screenshot = driver.get_screenshot_as_png(driver)
                         screenshot_b64 = base64.b64encode(screenshot).decode('utf-8')
 
                         step_result = {
