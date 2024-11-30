@@ -16,17 +16,23 @@ chrome_driver = None
 screenshot_path = 'screenshots/latest.png'
 screenshot_thread = None
 
-def setup_chrome_driver():
-    global chrome_driver
+def setup_interactive_browser(url):
     chrome_options = Options()
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
+    # Set a specific window size for consistent screenshots
+    chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.binary_location = "/usr/bin/google-chrome"
+    chrome_options.set_capability('goog:loggingPrefs', {'performance': 'ALL'})
     
-    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(options=chrome_options)
     
-    chrome_driver = webdriver.Chrome(service=service, options=chrome_options)
-    return chrome_driver
+    # Set a specific window size
+    driver.set_window_size(1920, 1080)
+    driver.get(url)
+    return driver
 
 def capture_screenshot():
     global chrome_driver, screenshot_path
