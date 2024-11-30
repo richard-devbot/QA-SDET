@@ -22,7 +22,6 @@ import os
 from chrome_setup import setup_chrome
 
 def setup_interactive_browser(url):
-    # Set up Chrome and ChromeDriver
     try:
         chrome_binary, chromedriver_path = setup_chrome()
     except Exception as e:
@@ -34,17 +33,47 @@ def setup_interactive_browser(url):
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.binary_location = chrome_binary
     
+    # Memory optimization
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--disable-plugins-discovery")
+    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--memory-pressure-off")
+    chrome_options.add_argument("--single-process")
+    chrome_options.add_argument("--disable-renderer-backgrounding")
+    chrome_options.add_argument("--disable-background-networking")
+    
+    # Handle lazy loading
+    chrome_options.add_argument("--blink-settings=imagesEnabled=true")
+    chrome_options.add_argument("--disable-features=LazyImageLoading,LazyFrameLoading")
+    
+    chrome_options.binary_location = chrome_binary
+
     try:
+        service = Service(executable_path=chromedriver_path)
         driver = webdriver.Chrome(
-            executable_path=chromedriver_path,
+            service=service,
             options=chrome_options
         )
+        
+        # Set page load strategy
+        driver.set_page_load_timeout(30)
+        driver.implicitly_wait(10)
+        
+        # Set window size
         driver.set_window_size(1920, 1080)
+        
+        # Navigate to URL
         driver.get(url)
+        
+        # Wait for page to load completely
+        driver.execute_script("return document.readyState") == "complete"
+        
         return driver
     except Exception as e:
+        if 'driver' in locals():
+            driver.quit()
         raise Exception(f"Failed to start Chrome: {str(e)}")
     
 def capture_screenshot():
