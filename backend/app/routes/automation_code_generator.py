@@ -22,17 +22,23 @@ def setup_interactive_browser(url):
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
-    # Set a specific window size for consistent screenshots
     chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.binary_location = "/usr/bin/google-chrome"
-    chrome_options.set_capability('goog:loggingPrefs', {'performance': 'ALL'})
     
-    driver = webdriver.Chrome(options=chrome_options)
+    # Use the custom Chrome binary location
+    chrome_binary = os.getenv('CHROME_BIN', os.path.expanduser('~/.apt/usr/bin/google-chrome'))
+    chrome_options.binary_location = chrome_binary
     
-    # Set a specific window size
+    # Use the custom ChromeDriver location
+    chromedriver_path = os.path.expanduser('~/.apt/usr/local/bin/chromedriver')
+    
+    driver = webdriver.Chrome(
+        executable_path=chromedriver_path,
+        options=chrome_options
+    )
+    
     driver.set_window_size(1920, 1080)
     driver.get(url)
-    return driver
+    return driver
 
 def capture_screenshot():
     global chrome_driver, screenshot_path
