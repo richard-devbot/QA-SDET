@@ -27,59 +27,32 @@ from selenium.webdriver.chrome.options import Options
 import os
 from chrome_setup import setup_chrome
 
-def setup_interactive_browser(url):
-    try:
-        chrome_binary, chromedriver_path = setup_chrome()
-    except Exception as e:
-        raise Exception(f"Failed to set up Chrome: {str(e)}")
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+import os
 
+def setup_interactive_browser(url):
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--disable-software-rasterizer")
     chrome_options.add_argument("--window-size=1920,1080")
     
-    # Memory optimization
-    chrome_options.add_argument("--disable-extensions")
-    chrome_options.add_argument("--disable-plugins-discovery")
-    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--memory-pressure-off")
-    chrome_options.add_argument("--single-process")
-    chrome_options.add_argument("--disable-renderer-backgrounding")
-    chrome_options.add_argument("--disable-background-networking")
+    # Use system Chrome and ChromeDriver
+    service = Service(executable_path="/usr/local/bin/chromedriver")
     
-    # Handle lazy loading
-    chrome_options.add_argument("--blink-settings=imagesEnabled=true")
-    chrome_options.add_argument("--disable-features=LazyImageLoading,LazyFrameLoading")
-    
-    chrome_options.binary_location = chrome_binary
-
     try:
-        service = Service(executable_path=chromedriver_path)
         driver = webdriver.Chrome(
             service=service,
             options=chrome_options
         )
-        
-        # Set page load strategy
-        driver.set_page_load_timeout(30)
-        driver.implicitly_wait(10)
-        
-        # Set window size
         driver.set_window_size(1920, 1080)
-        
-        # Navigate to URL
         driver.get(url)
-        
-        # Wait for page to load completely
-        driver.execute_script("return document.readyState") == "complete"
-        
         return driver
     except Exception as e:
-        if 'driver' in locals():
-            driver.quit()
         raise Exception(f"Failed to start Chrome: {str(e)}")
 
 def run_web_agent(objective: str, driver, max_retries=3, retry_delay=5):
