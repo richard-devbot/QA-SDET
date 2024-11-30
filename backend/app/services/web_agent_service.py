@@ -23,34 +23,33 @@ context = Context(llm=llm, mm_llm=mm_llm, embedding=embedding)
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import os
+from app.utils.chrome_setup import setup_chrome
 
 def setup_interactive_browser(url):
+    # Set up Chrome and ChromeDriver
+    try:
+        chrome_binary, chromedriver_path = setup_chrome()
+    except Exception as e:
+        raise Exception(f"Failed to set up Chrome: {str(e)}")
+
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920,1080")
-    
-    # Use the Chrome for Testing binary paths
-    chrome_binary = "/tmp/chrome/chrome-linux64/chrome"
-    chromedriver_path = "/tmp/chromedriver/chromedriver-linux64/chromedriver"
-    
-    if not os.path.exists(chrome_binary):
-        raise Exception(f"Chrome not found at {chrome_binary}")
-    if not os.path.exists(chromedriver_path):
-        raise Exception(f"ChromeDriver not found at {chromedriver_path}")
-    
     chrome_options.binary_location = chrome_binary
     
-    driver = webdriver.Chrome(
-        executable_path=chromedriver_path,
-        options=chrome_options
-    )
-    
-    driver.set_window_size(1920, 1080)
-    driver.get(url)
-    return driver
+    try:
+        driver = webdriver.Chrome(
+            executable_path=chromedriver_path,
+            options=chrome_options
+        )
+        driver.set_window_size(1920, 1080)
+        driver.get(url)
+        return driver
+    except Exception as e:
+        raise Exception(f"Failed to start Chrome: {str(e)}")
 
 def run_web_agent(objective: str, driver, max_retries=3, retry_delay=5):
     results = []
