@@ -15,6 +15,7 @@ def main():
 
     def install_project_dependencies():
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'selenium', 'webdriver_manager'])
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'gunicorn'])  # Add this line
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
 
     def setup_chrome():
