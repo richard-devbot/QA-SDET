@@ -19,7 +19,7 @@ screenshot_thread = None
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import os
-from app.utils.chrome_setup import setup_chrome
+from chrome_setup import setup_chrome
 
 def setup_interactive_browser(url):
     # Set up Chrome and ChromeDriver
