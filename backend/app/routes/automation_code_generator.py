@@ -28,9 +28,9 @@ def setup_interactive_browser(url):
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920,1080")
     
-    # Use symlinked binaries
-    chrome_binary = "/tmp/chrome/google-chrome"
-    chromedriver_path = "/tmp/chromedriver/chromedriver"
+    # Use the Chrome for Testing binary paths
+    chrome_binary = "/tmp/chrome/chrome-linux64/chrome"
+    chromedriver_path = "/tmp/chromedriver/chromedriver-linux64/chromedriver"
     
     if not os.path.exists(chrome_binary):
         raise Exception(f"Chrome not found at {chrome_binary}")
