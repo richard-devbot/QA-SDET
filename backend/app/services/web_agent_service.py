@@ -28,15 +28,12 @@ def setup_interactive_browser(url):
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920,1080")
     
-    # Use the custom Chrome binary location
-    chrome_binary = os.getenv('CHROME_BIN', os.path.expanduser('~/.apt/usr/bin/google-chrome'))
-    chrome_options.binary_location = chrome_binary
+    # Use the Chrome binary from the new location
+    chrome_options.binary_location = "/opt/chrome/chrome-linux64/chrome"
     
-    # Use the custom ChromeDriver location
-    chromedriver_path = os.path.expanduser('~/.apt/usr/local/bin/chromedriver')
-    
+    # Create driver using the new ChromeDriver location
     driver = webdriver.Chrome(
-        executable_path=chromedriver_path,
+        executable_path="/opt/chromedriver/chromedriver-linux64/chromedriver",
         options=chrome_options
     )
     
