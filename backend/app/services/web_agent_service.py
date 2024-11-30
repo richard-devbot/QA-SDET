@@ -11,7 +11,9 @@ from llama_index.embeddings.gemini import GeminiEmbedding
 from llama_index.llms.gemini import Gemini
 from llama_index.multi_modal_llms.gemini import GeminiMultiModal
 import os, csv, base64, io, time, json
-
+from PIL import Image
+import io
+import base64
 
 # Initialize the LLM and other required components
 llm = Gemini(model_name="models/gemini-1.5-flash-latest", api_key=os.getenv("GOOGLE_API_KEY"))
@@ -105,5 +107,23 @@ def run_web_agent(objective: str, driver, max_retries=3, retry_delay=5):
 
     return results
 
-def capture_screenshot(driver):
-    return driver.get_screenshot_as_png()
+def capture_and_optimize_screenshot(driver):
+    # Capture screenshot
+    screenshot = driver.get_screenshot_as_png()
+    
+    # Open with Pillow and optimize
+    image = Image.open(io.BytesIO(screenshot))
+    
+    # Resize if too large (adjust dimensions as needed)
+    max_width = 1200
+    if image.width > max_width:
+        ratio = max_width / image.width
+        new_size = (max_width, int(image.height * ratio))
+        image = image.resize(new_size, Image.Resampling.LANCZOS)
+    
+    # Save with optimization
+    buffer = io.BytesIO()
+    image.save(buffer, format='JPEG', quality=85, optimize=True)
+    
+    # Convert to base64
+    return base64.b64encode(buffer.getvalue()).decode('utf-8')
