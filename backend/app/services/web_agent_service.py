@@ -107,7 +107,7 @@ def run_web_agent(objective: str, driver, max_retries=3, retry_delay=5):
 
     return results
 
-def capture_and_optimize_screenshot(driver):
+def capture_screenshot(driver):
     # Capture screenshot
     screenshot = driver.get_screenshot_as_png()
     
