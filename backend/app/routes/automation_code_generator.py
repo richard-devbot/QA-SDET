@@ -1,10 +1,12 @@
 import os
 import base64
 from flask import Blueprint, request, jsonify
+from flask_cors import cross_origin
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
 from app.services.code_generator import main
 import traceback
 import threading
@@ -13,92 +15,140 @@ import time
 automation_code_generator_bp = Blueprint('automation_code_generator', __name__)
 
 chrome_driver = None
-screenshot_path = 'screenshots/latest.png'
+screenshot_path = '/app/screenshots/automation_latest.png'  # Separate path for automation_code_generator
 screenshot_thread = None
 
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-import os
-from chrome_setup import setup_chrome
-
-def setup_interactive_browser(url):
-    try:
-        chrome_binary, chromedriver_path = setup_chrome()
-    except Exception as e:
-        raise Exception(f"Failed to set up Chrome: {str(e)}")
-
+def setup_interactive_browser(url=None):
     chrome_options = Options()
-    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--window-size=1920,1080")
-    
-    # Memory optimization
+    chrome_options.add_argument("--disable-software-rasterizer")
     chrome_options.add_argument("--disable-extensions")
-    chrome_options.add_argument("--disable-plugins-discovery")
-    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--memory-pressure-off")
+    chrome_options.add_argument("--disable-dev-tools")
+    chrome_options.add_argument("--no-zygote")
     chrome_options.add_argument("--single-process")
-    chrome_options.add_argument("--disable-renderer-backgrounding")
-    chrome_options.add_argument("--disable-background-networking")
+    chrome_options.add_argument("--remote-debugging-port=9222")
+    chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument("--start-maximized")
     
-    # Handle lazy loading
-    chrome_options.add_argument("--blink-settings=imagesEnabled=true")
-    chrome_options.add_argument("--disable-features=LazyImageLoading,LazyFrameLoading")
+    # Point to the Chrome binary in our Docker container
+    chrome_options.binary_location = "/opt/chrome/chrome-linux64/chrome"
     
-    chrome_options.binary_location = chrome_binary
-
+    # Set up ChromeDriver service with increased timeout
+    service = Service(
+        executable_path="/opt/chromedriver/chromedriver-linux64/chromedriver"
+    )
+    
     try:
-        service = Service(executable_path=chromedriver_path)
+        print("Starting Chrome browser for automation_code_generator...")
         driver = webdriver.Chrome(
             service=service,
             options=chrome_options
         )
-        
-        # Set page load strategy
-        driver.set_page_load_timeout(30)
-        driver.implicitly_wait(10)
-        
-        # Set window size
-        driver.set_window_size(1920, 1080)
-        
-        # Navigate to URL
-        driver.get(url)
-        
-        # Wait for page to load completely
-        driver.execute_script("return document.readyState") == "complete"
-        
+        print("Chrome browser started successfully")
+        if url:
+            driver.get(url)
         return driver
     except Exception as e:
-        if 'driver' in locals():
-            driver.quit()
+        print(f"Chrome driver error: {str(e)}")
         raise Exception(f"Failed to start Chrome: {str(e)}")
-    
+
 def capture_screenshot():
     global chrome_driver, screenshot_path
-    if chrome_driver:
-        chrome_driver.save_screenshot(screenshot_path)
+    try:
+        if chrome_driver:
+            # Ensure directory exists
+            os.makedirs(os.path.dirname(screenshot_path), exist_ok=True)
+            
+            # Add a small delay to ensure the page is loaded
+            time.sleep(0.5)
+            
+            # Capture screenshot
+            chrome_driver.save_screenshot(screenshot_path)
+            print(f"Screenshot saved to {screenshot_path}")
+            
+            # Verify file exists and has size
+            if os.path.exists(screenshot_path):
+                size = os.path.getsize(screenshot_path)
+                print(f"Screenshot size: {size} bytes")
+                if size == 0:
+                    print("Warning: Screenshot file is empty!")
+            else:
+                print("Error: Screenshot file not created!")
+    except Exception as e:
+        print(f"Screenshot error: {str(e)}")
+        print(traceback.format_exc())
 
-@automation_code_generator_bp.route('/api/start-browser', methods=['POST'])
+def periodic_screenshot_capture():
+    thread = threading.current_thread()
+    while getattr(thread, "do_run", True):
+        capture_screenshot()
+        time.sleep(1)
+
+@automation_code_generator_bp.route('/api/start-browser', methods=['POST', 'OPTIONS'])
+@cross_origin(supports_credentials=True, methods=['POST', 'OPTIONS'], 
+             allow_headers=['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'])
 def start_browser():
+    if request.method == 'OPTIONS':
+        return '', 200
     try:
         global chrome_driver, screenshot_thread
-        chrome_driver = setup_chrome_driver()
+        
+        # Get URL from request
+        data = request.get_json()
+        url = data.get('url')
+        
+        if not url:
+            return jsonify({"error": "URL is required"}), 400
+            
+        # Ensure URL has protocol
+        if not url.startswith('http://') and not url.startswith('https://'):
+            url = f"https://{url}"
+        
+        print(f"Starting browser with URL: {url}")
+        
+        # Stop existing browser if any
+        if chrome_driver:
+            chrome_driver.quit()
+            chrome_driver = None
+        
+        # Stop existing screenshot thread if any
+        if screenshot_thread and screenshot_thread.is_alive():
+            screenshot_thread.do_run = False
+            screenshot_thread.join()
+        
+        # Start new browser with URL
+        chrome_driver = setup_interactive_browser(url)
+        
+        if not chrome_driver:
+            return jsonify({"error": "Failed to start browser"}), 500
+            
+        # Verify navigation
+        try:
+            current_url = chrome_driver.current_url
+            print(f"Browser navigated to: {current_url}")
+        except Exception as e:
+            print(f"Error verifying navigation: {str(e)}")
+            return jsonify({"error": f"Failed to navigate to {url}: {str(e)}"}), 500
         
         # Start a thread to capture screenshots periodically
         screenshot_thread = threading.Thread(target=periodic_screenshot_capture)
         screenshot_thread.start()
         
-        return jsonify({"message": "Browser started successfully"})
+        return jsonify({"message": "Browser started successfully", "url": current_url})
     except Exception as e:
         print(f"Error starting browser: {str(e)}")
         print(traceback.format_exc())
         return jsonify({"error": str(e)}), 500
 
-@automation_code_generator_bp.route('/api/generate-code', methods=['POST'])
+@automation_code_generator_bp.route('/api/generate-code', methods=['POST', 'OPTIONS'])
+@cross_origin(supports_credentials=True, methods=['POST', 'OPTIONS'],
+             allow_headers=['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'])
 def generate_automation_code():
+    if request.method == 'OPTIONS':
+        return '', 200
     global chrome_driver
     try:
         data = request.json
@@ -107,40 +157,71 @@ def generate_automation_code():
         language = data['language']
         
         if not chrome_driver:
-            chrome_driver = setup_chrome_driver()
+            print("Browser not started, initializing new browser session...")
+            chrome_driver = setup_interactive_browser(url)
+        else:
+            try:
+                # Check if browser is still responsive
+                chrome_driver.current_url
+                chrome_driver.get(url)
+            except Exception as e:
+                print(f"Browser session expired, starting new session: {str(e)}")
+                chrome_driver = setup_interactive_browser(url)
         
         code = main(url, feature_content, language, chrome_driver)
-        
         return jsonify({"code": code})
     except Exception as e:
         print(f"Error in generate_automation_code: {str(e)}")
         print(traceback.format_exc())
         return jsonify({"error": str(e)}), 500
 
-def periodic_screenshot_capture():
-    thread = threading.current_thread()
-    while getattr(thread, "do_run", True):
-        capture_screenshot()
-        time.sleep(1)  # Capture a screenshot every second
-
-@automation_code_generator_bp.route('/api/get-screenshot', methods=['GET'])
+@automation_code_generator_bp.route('/api/get-screenshot', methods=['GET', 'OPTIONS'])
+@cross_origin(supports_credentials=True, methods=['GET', 'OPTIONS'],
+             allow_headers=['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'])
 def get_screenshot():
-    if os.path.exists(screenshot_path):
-        with open(screenshot_path, "rb") as image_file:
-            encoded_string = base64.b64encode(image_file.read()).decode()
-        return jsonify({"screenshot": encoded_string})
-    else:
-        return jsonify({"error": "Screenshot not available"}), 404
+    if request.method == 'OPTIONS':
+        return '', 200
+    try:
+        if os.path.exists(screenshot_path):
+            with open(screenshot_path, "rb") as image_file:
+                encoded_string = base64.b64encode(image_file.read()).decode()
+            return jsonify({
+                "screenshot": encoded_string,
+                "timestamp": os.path.getmtime(screenshot_path)
+            })
+        else:
+            return jsonify({
+                "error": "Screenshot not available",
+                "path": screenshot_path,
+                "exists": False
+            }), 404
+    except Exception as e:
+        return jsonify({
+            "error": str(e),
+            "path": screenshot_path,
+            "trace": traceback.format_exc()
+        }), 500
 
-@automation_code_generator_bp.route('/api/stop-browser', methods=['POST'])
+@automation_code_generator_bp.route('/api/stop-browser', methods=['POST', 'OPTIONS'])
+@cross_origin(supports_credentials=True, methods=['POST', 'OPTIONS'],
+             allow_headers=['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'])
 def stop_browser():
+    if request.method == 'OPTIONS':
+        return '', 200
     global chrome_driver, screenshot_thread
-    if screenshot_thread:
-        screenshot_thread.do_run = False
-        screenshot_thread.join()
-    if chrome_driver:
-        chrome_driver.quit()
-        chrome_driver = None
-    if os.path.exists(screenshot_path):
-        os.remove(screenshot_path)
-    return jsonify({"message": "Browser stopped successfully"})
+    try:
+        if screenshot_thread:
+            screenshot_thread.do_run = False
+            screenshot_thread.join()
+            screenshot_thread = None
+        
+        if chrome_driver:
+            chrome_driver.quit()
+            chrome_driver = None
+        
+        if os.path.exists(screenshot_path):
+            os.remove(screenshot_path)
+        
+        return jsonify({"message": "Browser stopped successfully"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
