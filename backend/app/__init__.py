@@ -13,7 +13,36 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
     
     # Configure CORS to allow all origins for all routes
-    CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
+    CORS(app, resources={
+        r"/api/*": {
+            "origins": [
+                "https://waigenie-frontend-seven.vercel.app",
+                "http://localhost:3000",
+                "http://localhost:10000"
+            ],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": [
+                "Content-Type",
+                "Authorization",
+                "X-Requested-With",
+                "Accept",
+                "Origin",
+                "Access-Control-Allow-Origin",
+                "Access-Control-Allow-Headers",
+                "Access-Control-Allow-Methods"
+            ],
+            "expose_headers": [
+                "Content-Type",
+                "Authorization",
+                "Access-Control-Allow-Origin",
+                "Access-Control-Allow-Headers",
+                "Access-Control-Allow-Methods"
+            ],
+            "supports_credentials": True,
+            "send_wildcard": False,
+            "max_age": 86400
+        }
+    })
 
     app.register_blueprint(proxy_bp)
     app.register_blueprint(test_idea_bp)
