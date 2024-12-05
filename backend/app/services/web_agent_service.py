@@ -11,9 +11,7 @@ from llama_index.embeddings.gemini import GeminiEmbedding
 from llama_index.llms.gemini import Gemini
 from llama_index.multi_modal_llms.gemini import GeminiMultiModal
 import os, csv, base64, io, time, json
-from PIL import Image
-import io
-import base64
+
 
 # Initialize the LLM and other required components
 llm = Gemini(model_name="models/gemini-1.5-flash-latest", api_key=os.getenv("GOOGLE_API_KEY"))
@@ -22,45 +20,28 @@ embedding = GeminiEmbedding(model_name="models/text-embedding-004", api_key=os.g
 
 context = Context(llm=llm, mm_llm=mm_llm, embedding=embedding)
 
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-import os
-from chrome_setup import setup_chrome
 
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-import os
-
-def setup_interactive_browser(url):
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--disable-software-rasterizer")
-    chrome_options.add_argument("--window-size=1920,1080")
-    
-    # Use system Chrome and ChromeDriver
-    service = Service(executable_path="/usr/local/bin/chromedriver")
-    
-    try:
-        driver = webdriver.Chrome(
-            service=service,
-            options=chrome_options
-        )
-        driver.set_window_size(1920, 1080)
-        driver.get(url)
-        return driver
-    except Exception as e:
-        raise Exception(f"Failed to start Chrome: {str(e)}")
-
-def run_web_agent(objective: str, driver, max_retries=3, retry_delay=5):
+def run_web_agent(objective: str, url: str, driver, max_retries=3, retry_delay=5):
     results = []
     retry_count = 0
 
     while retry_count < max_retries:
         try:
+            # Verify current URL matches expected URL
+            current_url = driver.current_url
+            if current_url == "about:blank":
+                print(f"Page not loaded, navigating to: {url}")
+                driver.get(url)
+                current_url = driver.current_url
+            
+            # Verify we're on the right page
+            if not (url in current_url or current_url in url):
+                print(f"Current URL {current_url} doesn't match expected {url}, navigating...")
+                driver.get(url)
+                current_url = driver.current_url
+            
+            print(f"Running web agent on URL: {current_url}")
+            
             selenium_driver = SeleniumDriver(driver=driver)
             world_model = WorldModel.from_context(context)
             action_engine = ActionEngine.from_context(context, selenium_driver)
@@ -71,13 +52,11 @@ def run_web_agent(objective: str, driver, max_retries=3, retry_delay=5):
                 while step_retry_count < max_retries:
                     try:
                         result = agent.run(objective)
-                        screenshot = driver.get_screenshot_as_png(driver)
-                        screenshot_b64 = base64.b64encode(screenshot).decode('utf-8')
 
                         step_result = {
                             "step": step + 1,
+                            "url": url,
                             "current_url": driver.current_url,
-                            "screenshot": screenshot_b64,
                             "action_taken": result.instruction,
                             "output": result.output,
                             "success": result.success
@@ -85,13 +64,15 @@ def run_web_agent(objective: str, driver, max_retries=3, retry_delay=5):
                         results.append(step_result)
 
                         if result.success:
-                            print("2024-09-20 15:29:43,657 - INFO - Objective reached. Stopping...")
+                            print("Objective reached. Stopping...")
                             return results
 
                     except Exception as step_error:
                         print(f"Error during step {step + 1}: {str(step_error)}")
                         results.append({
                             "step": step + 1,
+                            "url": url,
+                            "current_url": driver.current_url,
                             "error": str(step_error)
                         })
                         step_retry_count += 1
@@ -103,29 +84,12 @@ def run_web_agent(objective: str, driver, max_retries=3, retry_delay=5):
 
         except Exception as e:
             print(f"Error during web agent execution: {str(e)}")
-            results.append({"error": str(e)})
+            results.append({
+                "error": str(e),
+                "url": url,
+                "current_url": getattr(driver, 'current_url', 'unknown')
+            })
             retry_count += 1
             time.sleep(retry_delay)
 
     return results
-
-def capture_screenshot(driver):
-    # Capture screenshot
-    screenshot = driver.get_screenshot_as_png()
-    
-    # Open with Pillow and optimize
-    image = Image.open(io.BytesIO(screenshot))
-    
-    # Resize if too large (adjust dimensions as needed)
-    max_width = 1200
-    if image.width > max_width:
-        ratio = max_width / image.width
-        new_size = (max_width, int(image.height * ratio))
-        image = image.resize(new_size, Image.Resampling.LANCZOS)
-    
-    # Save with optimization
-    buffer = io.BytesIO()
-    image.save(buffer, format='JPEG', quality=85, optimize=True)
-    
-    # Convert to base64
-    return base64.b64encode(buffer.getvalue()).decode('utf-8')
