@@ -52,11 +52,11 @@ def proxy():
                         }
                         sibling = sibling.previousElementSibling;
                     }
-                    path = /${element.tagName.toLowerCase()}[${index}]${path};
+                    path = `/${element.tagName.toLowerCase()}[${index}]${path}`;
                     element = element.parentElement;
                     if (!element) break;
                 }
-                return /body${path};
+                return `/body${path}`;
             } catch (error) {
                 console.warn('Error generating relative XPath:', error);
                 return '';
@@ -72,8 +72,8 @@ def proxy():
                 const segs = elm => !elm || elm.nodeType !== 1 
                     ? ['']
                     : elm.id && document.getElementById(elm.id) === elm
-                        ? [//*[@id="${elm.id}"]]
-                        : [...segs(elm.parentNode), ${elm.tagName}[${idx(elm)}]];
+                        ? [`//*[@id="${elm.id}"]`]
+                        : [...segs(elm.parentNode), `${elm.tagName}[${idx(elm)}]`];
                 return segs(element).join('/').toLowerCase();
             } catch (error) {
                 console.warn('Error generating absolute XPath:', error);
@@ -101,7 +101,7 @@ def proxy():
                             sibling = sibling.previousElementSibling;
                         }
                         if (index > 1) {
-                            selector += :nth-of-type(${index});
+                            selector += `:nth-of-type(${index})`;
                         }
                         parts.unshift(selector);
                         element = element.parentNode;
@@ -212,12 +212,12 @@ def proxy():
                 // Generate a unique selector using multiple attributes
                 const generateUniqueSelector = () => {
                     const parts = [];
-                    if (element.id) parts.push(#${element.id});
+                    if (element.id) parts.push(`#${element.id}`);
                     if (element.className) {
                         const classes = Array.from(element.classList).join('.');
-                        if (classes) parts.push(.${classes});
+                        if (classes) parts.push(`.${classes}`);
                     }
-                    if (element.name) parts.push([name="${element.name}"]);
+                    if (element.name) parts.push(`[name="${element.name}"]`);
                     if (element.tagName) parts.push(element.tagName.toLowerCase());
                     return parts.join('');
                 };
@@ -247,7 +247,7 @@ def proxy():
                 
                 const listeners = {};
                 eventTypes.forEach(type => {
-                    const hasListener = element[on${type}] !== null;
+                    const hasListener = element[`on${type}`] !== null;
                     if (hasListener) {
                         listeners[type] = true;
                     }
@@ -300,8 +300,8 @@ def proxy():
                         let current = el;
                         while (current && current !== element.shadowRoot) {
                             let selector = current.tagName.toLowerCase();
-                            if (current.id) selector += #${current.id};
-                            if (current.className) selector += .${current.className.split(' ').join('.')};
+                            if (current.id) selector += `#${current.id}`;
+                            if (current.className) selector += `.${current.className.split(' ').join('.')}`;
                             shadowPath.unshift(selector);
                             current = current.parentElement;
                         }
@@ -524,7 +524,7 @@ def proxy():
             function safeGetXPath(element) {
                 try {
                     if (element.id !== '')
-                        return 'id("' + element.id + '")';
+                        return `id("${element.id}")`;
                     if (element === document.body)
                         return element.tagName;
 
@@ -533,7 +533,7 @@ def proxy():
                     for (let i = 0; i < siblings.length; i++) {
                         const sibling = siblings[i];
                         if (sibling === element)
-                            return safeGetXPath(element.parentNode) + '/' + element.tagName + '[' + (ix + 1) + ']';
+                            return safeGetXPath(element.parentNode) + '/' + element.tagName + `[${ix + 1}]`;
                         if (sibling.nodeType === 1 && sibling.tagName === element.tagName)
                             ix++;
                     }
